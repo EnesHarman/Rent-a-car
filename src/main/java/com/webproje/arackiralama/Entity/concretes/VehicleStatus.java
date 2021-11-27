@@ -31,7 +31,7 @@ public class VehicleStatus {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name="name", nullable = false,columnDefinition ="varchar(10)")
+	@Column(name="name", nullable = false,columnDefinition ="varchar(10)", unique = true)
 	private String name;
 	
 	@OneToMany(mappedBy = "vehicleStatus")
