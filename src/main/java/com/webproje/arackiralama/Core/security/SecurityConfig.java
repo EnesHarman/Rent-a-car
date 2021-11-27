@@ -15,6 +15,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.webproje.arackiralama.Core.security.filters.CustomAuthenticationFilter;
 import com.webproje.arackiralama.Core.security.filters.CustomAuthorizationFilter;
 
+import org.springframework.http.HttpMethod;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -33,7 +34,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.csrf().disable(); // bakılacak
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.authorizeRequests().antMatchers("/api/login/**").permitAll();
-		
+		http.authorizeRequests().antMatchers("/api/customer/register/**").permitAll();
+		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/vehicle/add/**").hasAnyAuthority("ROLE_CUSTOMER");
 		http.authorizeRequests()
         .antMatchers(
             "/v2/api-docs", 

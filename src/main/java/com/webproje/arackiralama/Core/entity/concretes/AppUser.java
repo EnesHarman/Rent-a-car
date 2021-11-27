@@ -40,7 +40,7 @@ public class AppUser {
 	@Column(name="id")
 	private int id;
 	
-	@Column(name="email", unique = true) 
+	@Column(name="email", unique = true,columnDefinition = "nvarchar(255)") 
 	@Email
 	@NotBlank
 	@NotNull

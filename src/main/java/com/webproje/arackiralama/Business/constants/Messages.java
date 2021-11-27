@@ -8,4 +8,6 @@ public class Messages {
 	public static final String vehicleStatusNotFound = "There is no vehicle status with that name. Please check your input.";
 	
 	public static final String vehicleAdded = "The vehicle added successfuly";
+	
+	public static final String customerRegistered= "You have registed the service succesfuly";
 }
