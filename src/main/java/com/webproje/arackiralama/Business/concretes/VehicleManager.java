@@ -78,6 +78,13 @@ public class VehicleManager implements VehicleService{
 		return new SuccessResult(Messages.vehicleAdded);
 	}
 
+
+	@Override
+	public Result updateVehicle(int vehicleId, VehicleDto vehicleDto) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	
 
 }

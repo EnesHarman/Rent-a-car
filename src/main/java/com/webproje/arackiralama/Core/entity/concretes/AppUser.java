@@ -40,7 +40,7 @@ public class AppUser {
 	@Column(name="id")
 	private int id;
 	
-	@Column(name="email") 
+	@Column(name="email", unique = true) 
 	@Email
 	@NotBlank
 	@NotNull

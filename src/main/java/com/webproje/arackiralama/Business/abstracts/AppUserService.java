@@ -1,5 +1,7 @@
 package com.webproje.arackiralama.Business.abstracts;
 
-public interface AppUserService {
+import com.webproje.arackiralama.Core.entity.concretes.AppUser;
 
+public interface AppUserService {
+	public AppUser saveUser(AppUser user);
 }

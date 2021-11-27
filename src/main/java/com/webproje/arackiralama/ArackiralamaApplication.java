@@ -4,6 +4,7 @@ package com.webproje.arackiralama;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
@@ -25,5 +26,10 @@ public class ArackiralamaApplication {
           .apis(RequestHandlerSelectors.basePackage("com.webproje.arackiralama"))                                    
           .build();                                             
     }
+	
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
 }

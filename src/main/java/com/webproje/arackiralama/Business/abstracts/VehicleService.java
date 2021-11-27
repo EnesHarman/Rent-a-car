@@ -7,4 +7,6 @@ public interface VehicleService {
 
 	Result addVehicle(VehicleDto vehicleDto);
 
+	Result updateVehicle(int vehicleId, VehicleDto vehicleDto);
+
 }
