@@ -28,7 +28,7 @@ public class GearType {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name="name", nullable = false,columnDefinition ="varchar(25)")
+	@Column(name="name", nullable = false,columnDefinition ="varchar(25)", unique = true)
 	private String name;
 	
 	@OneToMany(mappedBy = "gearType")
