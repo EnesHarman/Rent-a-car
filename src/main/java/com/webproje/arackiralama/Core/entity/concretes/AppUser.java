@@ -14,8 +14,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.sun.istack.NotNull;
 import com.webproje.arackiralama.Entity.concretes.CarRentals;
 import com.webproje.arackiralama.Entity.concretes.CompanyManager;
 import com.webproje.arackiralama.Entity.concretes.Customer;
@@ -38,9 +41,14 @@ public class AppUser {
 	private int id;
 	
 	@Column(name="email") 
+	@Email
+	@NotBlank
+	@NotNull
 	private String email;
 	
 	@Column(name="password")
+	@NotBlank
+	@NotNull
 	private String password;
 	
 	@ManyToOne

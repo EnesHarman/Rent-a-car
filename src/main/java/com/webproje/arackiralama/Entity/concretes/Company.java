@@ -32,7 +32,7 @@ public class Company {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	
-	@Column(name="company_name", nullable = false)
+	@Column(name="name", nullable = false)
 	private String companyName;
 	
 	@Column(name="adress" , nullable = false ,columnDefinition = "text")

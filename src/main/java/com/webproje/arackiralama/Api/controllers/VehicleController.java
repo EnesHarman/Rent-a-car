@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.webproje.arackiralama.Business.abstracts.VehicleService;
+import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
 import com.webproje.arackiralama.Entity.dto.VehicleDto;
 
 @RestController
@@ -24,7 +25,13 @@ public class VehicleController {
 	
 	@PostMapping("/add")
 	public ResponseEntity<?> AddVehicle(@RequestBody VehicleDto vehicleDto){
-		
+		Result result = this.vehicleService.addVehicle(vehicleDto);
+		if(result.getSuccess()) {
+			return ResponseEntity.ok(result.getMessage());
+		}
+		else {
+			return ResponseEntity.badRequest().body(result.getMessage());
+		}
 	}
 	
 }

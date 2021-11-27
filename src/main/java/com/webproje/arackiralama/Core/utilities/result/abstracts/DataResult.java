@@ -8,6 +8,12 @@ public abstract class DataResult<T> extends Result{
 		super(success);
 		
 	}
+	
+	public DataResult(boolean success,T data) {
+		super(success);
+		this.data = data;
+	}
+	
 	public DataResult(boolean success, String message) {
 		super(success, message);
 	}

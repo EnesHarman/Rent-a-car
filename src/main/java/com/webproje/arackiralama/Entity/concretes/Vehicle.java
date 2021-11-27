@@ -58,12 +58,12 @@ public class Vehicle {
 	private GearType gearType;
 	
 	@ManyToOne
-	@JoinColumn(name="company_id")
-	private Company company;
-	
-	@ManyToOne
 	@JoinColumn(name="vehicle_status_id")
 	private VehicleStatus vehicleStatus;
+	
+	@ManyToOne
+	@JoinColumn(name="company_id")
+	private Company company;
 	
 	@OneToMany(mappedBy = "vehicle")
 	private List<CarRentals> carRentals;

@@ -7,6 +7,10 @@ public class SuccessDataResult<T> extends DataResult<T>{
 	public SuccessDataResult() {
 		super(true);
 	}
+	
+	public SuccessDataResult(T data) {
+		super(true, data);
+	}
 
 	public SuccessDataResult( String message) {
 		super(true,message);

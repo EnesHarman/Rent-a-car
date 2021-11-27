@@ -19,7 +19,7 @@ public class VehicleDto {
 	
 	private double price;
 	
-	private String ImgUrl;
+	private String imgUrl;
 	
 	private String fuelType;
 	
