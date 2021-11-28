@@ -36,7 +36,7 @@ public class CarRentals {
 
 	@ManyToOne
 	@JoinColumn(name= "hirer_id")
-	private AppUser hirer;
+	private Customer hirer;
 	
 	@ManyToOne
 	@JoinColumn(name="company_id")

@@ -38,8 +38,5 @@ public class SystemManager {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="user_id")
 	private AppUser user;
-	
-	@ManyToOne
-	@JoinColumn(name = "company_id")
-	private Company company;
+
 }

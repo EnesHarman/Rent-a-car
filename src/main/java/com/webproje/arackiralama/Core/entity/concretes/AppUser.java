@@ -64,6 +64,4 @@ public class AppUser {
 	@OneToOne(mappedBy = "user")
 	private Customer customer;
 	
-	@OneToMany(mappedBy = "hirer", cascade =  CascadeType.REMOVE)
-	private List<CarRentals> carRentals;
 }

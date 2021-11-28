@@ -27,6 +27,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer","handler","managers","carRentals"})
 public class Company {
+	
+	public Company(int id) {
+		this.id = id;
+	}
+	
 	@Id
 	@Column(name="id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,7 +63,7 @@ public class Company {
 	private List<Vehicle> vehicles;
 	
 	@OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-	private List<SystemManager> managers;
+	private List<CompanyManager> managers;
 	
 	@OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE)
 	private List<CarRentals> carRentals;
