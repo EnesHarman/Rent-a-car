@@ -14,6 +14,9 @@ import org.springframework.stereotype.Service;
 
 import com.webproje.arackiralama.Business.abstracts.AppUserService;
 import com.webproje.arackiralama.Core.entity.concretes.AppUser;
+import com.webproje.arackiralama.Core.utilities.result.abstracts.DataResult;
+import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorDataResult;
+import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessDataResult;
 import com.webproje.arackiralama.Repository.AppUserRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +38,7 @@ public class AppUserManager implements UserDetailsService, AppUserService{
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		AppUser user = this.userRepository.findByEmail(username);
+		AppUser user = this.userRepository.getByEmail(username);
 		if(user == null) {
 			log.error("User not found in database");
 			throw new UsernameNotFoundException("Email not found in database");
@@ -55,6 +58,19 @@ public class AppUserManager implements UserDetailsService, AppUserService{
 		user.setPassword(this.passwordEncoder.encode(user.getPassword()));
 		return this.userRepository.save(user);
 	}
+
+	@Override
+	public DataResult<AppUser> getUserByEmail(String email) {
+		 AppUser user = this.userRepository.getByEmail(email);
+		 if(user == null) {
+			 return new ErrorDataResult<AppUser>("There is a problem with your session. Please try again later.");
+		 }
+		 else {
+			 return new SuccessDataResult<AppUser>(user);
+		 }
+	}
+
+	
 	
 	
 

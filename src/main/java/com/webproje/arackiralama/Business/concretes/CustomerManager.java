@@ -11,7 +11,7 @@ import com.webproje.arackiralama.Core.entity.concretes.Role;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
 import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessResult;
 import com.webproje.arackiralama.Entity.concretes.Customer;
-import com.webproje.arackiralama.Entity.dto.CustomerRegisterDto;
+import com.webproje.arackiralama.Entity.dto.customerDtos.CustomerRegisterDto;
 import com.webproje.arackiralama.Repository.CustomerRepository;
 
 @Service

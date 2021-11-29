@@ -11,6 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.webproje.arackiralama.Core.entity.concretes.AppUser;
 
 import lombok.AllArgsConstructor;
@@ -21,18 +22,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name="company_manager")
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler","user"})
 public class CompanyManager {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
 	private int id;
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "company_id")
 	private Company company;
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name="user_id")
-
-	private AppUser user;
+	private AppUser appUser;
 }

@@ -1,4 +1,6 @@
-package com.webproje.arackiralama.Entity.dto;
+package com.webproje.arackiralama.Entity.dto.companyDtos;
+
+import com.webproje.arackiralama.Entity.dto.companyManagerDtos.CompanyManagerRegisterDto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

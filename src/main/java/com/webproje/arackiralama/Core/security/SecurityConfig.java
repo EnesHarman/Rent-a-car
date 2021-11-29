@@ -37,7 +37,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/customer/register/**").permitAll();
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/systemmanager/register/**").permitAll();
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/company/add/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
-		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/vehicle/add/**").hasAnyAuthority("ROLE_CUSTOMER");
+		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/vehicle/add/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/companymanager/vehicles/list/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
 		http.authorizeRequests()
         .antMatchers(
             "/v2/api-docs", 

@@ -6,6 +6,5 @@ import com.webproje.arackiralama.Core.entity.concretes.AppUser;
 
 public interface AppUserRepository extends JpaRepository<AppUser, Integer>{
 
-	AppUser findByEmail(String email);
-
+	AppUser getByEmail(String email);
 }

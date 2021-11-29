@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.webproje.arackiralama.Business.abstracts.CustomerService;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
-import com.webproje.arackiralama.Entity.dto.CustomerRegisterDto;
+import com.webproje.arackiralama.Entity.dto.customerDtos.CustomerRegisterDto;
 
 @RestController
 @RequestMapping("/api/customer")

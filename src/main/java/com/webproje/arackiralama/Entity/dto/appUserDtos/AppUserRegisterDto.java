@@ -1,4 +1,4 @@
-package com.webproje.arackiralama.Entity.dto;
+package com.webproje.arackiralama.Entity.dto.appUserDtos;
 
 import lombok.Data;
 

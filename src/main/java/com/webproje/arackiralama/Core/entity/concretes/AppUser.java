@@ -33,12 +33,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name="users")
 @Entity
-@JsonIgnoreProperties({"hibernateLazyInitializer","handler","systemManager","companyManager","customer","carRentals"})
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler","systemManager","companyManager","customer"})
 public class AppUser {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
-	private int id;
+	private int userId;
 	
 	@Column(name="email", unique = true,columnDefinition = "nvarchar(255)") 
 	@Email
@@ -58,7 +58,7 @@ public class AppUser {
 	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
 	private SystemManager systemManager;
 	
-	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "appUser", fetch = FetchType.LAZY)
 	private CompanyManager companyManager;
 	
 	@OneToOne(mappedBy = "user")

@@ -1,5 +1,7 @@
 package com.webproje.arackiralama.Business.concretes;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,11 +10,14 @@ import com.webproje.arackiralama.Business.abstracts.CompanyManagerService;
 import com.webproje.arackiralama.Business.constants.Messages;
 import com.webproje.arackiralama.Core.entity.concretes.AppUser;
 import com.webproje.arackiralama.Core.entity.concretes.Role;
+import com.webproje.arackiralama.Core.utilities.result.abstracts.DataResult;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
+import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessDataResult;
 import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessResult;
 import com.webproje.arackiralama.Entity.concretes.Company;
 import com.webproje.arackiralama.Entity.concretes.CompanyManager;
-import com.webproje.arackiralama.Entity.dto.CompanyManagerRegisterDto;
+import com.webproje.arackiralama.Entity.dto.companyManagerDtos.CompanyManagerRegisterDto;
+import com.webproje.arackiralama.Entity.dto.vehicleDtos.VehicleDto;
 import com.webproje.arackiralama.Repository.AppUserRepository;
 import com.webproje.arackiralama.Repository.CompanyManagerRepository;
 
@@ -39,9 +44,19 @@ public class CompanyManagerManager implements CompanyManagerService{
 		
 		CompanyManager companyManager = new CompanyManager();
 		companyManager.setCompany(new Company(companyId));
-		companyManager.setUser(insertedUser);
+		companyManager.setAppUser(insertedUser);
 		this.companyManagerRepository.save(companyManager);
 		return new SuccessResult(Messages.companyManagerAdded);
 	}
+
+
+	@Override
+	public DataResult<Integer> getCompanyIdByManagerEmail(String email) {
+		DataResult<AppUser>user = this.appUserService.getUserByEmail(email);
+		CompanyManager companyManager = this.companyManagerRepository.getByAppUser_UserId(user.getData().getUserId());
+		return new SuccessDataResult<Integer>(companyManager.getCompany().getId());
+	}
+
+
 
 }

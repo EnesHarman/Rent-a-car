@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorResult ;
+import com.webproje.arackiralama.Entity.dto.companyDtos.CompanyAddDto;
 import com.webproje.arackiralama.Business.abstracts.CompanyService;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
-import com.webproje.arackiralama.Entity.dto.CompanyAddDto;
 
 @RestController
 @RequestMapping("/api/company")
