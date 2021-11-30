@@ -13,9 +13,16 @@ public class Messages {
 	public static final String vehicleUpdated = "The vehicle updated successfuly";
 	public static final String vehicleDeleted = "The vehicle deleted successfuly";
 	public static final String vehicleNotFound = "There is no vehicle with that id. Please check your input.";
+	public static final String vehicleReturned = "The vehicle has been returned successfuly.";
+	
+	public static final String otherCompaniesActionError = "You are not allowed to do this action. Please check your inputs.";
 	
 	
 	public static final String carRentalRequestReceived= "You rental request has received the company succesfuly.";
+	public static final String carRentalRequestRejected= "The rental request rejected successfuly.";
+	public static final String carRentalRequestApproved= "The rental request approved successfuly.";
+	public static final String carRentalAlreadyApproved= "Error: The rental request approved already.";
+	public static final String carRentalCannotReject= "Error: The rental request approved already. You can't reject it now.";
 	
 	public static final String customerRegistered= "You have registed the service succesfuly.";
 	

@@ -48,4 +48,8 @@ public class CarRentals {
 	@ManyToOne
 	@JoinColumn(name="vehicle_id")
 	private Vehicle vehicle;
+	
+	public boolean getIsApproved() {
+		return this.isApproved;
+	}
 }

@@ -159,6 +159,8 @@ public class VehicleManager implements VehicleService{
 	@Override
 	public DataResult<List<VehicleDto>> listVehicles(Optional<Integer> companyId, Optional<Integer> pageSize,
 			Optional<Integer> pageNum) {
+		int vehicleStatusRentableId = 1;
+		
 		int _pageSize = pageSize.isPresent() && pageSize.get()<20 && pageSize.get()>10 ?pageSize.get() : 10;
 		int _pageNum = pageNum.isPresent() && pageNum.get()>0 ? pageNum.get(): 1;
 		Pageable pageable = PageRequest.of(_pageNum-1, _pageSize);
@@ -166,10 +168,10 @@ public class VehicleManager implements VehicleService{
 		List<VehicleDto> vehicles = new ArrayList<VehicleDto>();
 		
 		if(companyId.isPresent()) {
-			vehicles = this.vehicleRepository.listVehiclesByCompanyId(companyId.get(), pageable);
+			vehicles = this.vehicleRepository.listVehiclesByCompanyId(companyId.get(), pageable,vehicleStatusRentableId);
 		}
 		else {
-			vehicles = this.vehicleRepository.listVehicles(pageable);
+			vehicles = this.vehicleRepository.listVehicles(pageable,vehicleStatusRentableId);
 		}
 		return new SuccessDataResult<List<VehicleDto>>(Messages.vehiclesListed,vehicles);
 	}

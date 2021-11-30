@@ -2,22 +2,32 @@ package com.webproje.arackiralama.Entity.dto.carRentalsDtos;
 
 import java.util.Date;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class CarRentalDto {
+@AllArgsConstructor
 
+public class CarRentalListDto {
+	private int rentalRequestId;
+	
 	private int rentalPeriod;
 	
 	private Date rentalDate;
 	
-	private int companyId;
+	private  String customerName;
+	
+	private String customerSurname;
+	
+	private String customerNumber;
 
 	private int vehicleId;
+
+	private String ImgUrl;
 	
+	private String brand;
+	
+	private String model;
 }

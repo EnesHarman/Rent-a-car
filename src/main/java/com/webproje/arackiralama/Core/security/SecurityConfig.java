@@ -40,9 +40,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/vehicle/add/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
 		http.authorizeRequests().antMatchers(HttpMethod.PUT,"/api/vehicle/update/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
 		http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/api/vehicle/delete/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/vehicle/rentals/list/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/api/companymanager/rentals/list/{requestId}/reject/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.PUT,"/api/companymanager/rentals/list/{requestId}/confirm/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/vehicle/rent/**").hasAnyAuthority("ROLE_CUSTOMER");
-		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/vehicle/list/**").hasAnyAuthority("ROLE_COMPANY_MANAGER, ROLE_CUSTOMER");
+		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/vehicle/list/**").permitAll();
 		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/companymanager/vehicles/list/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/companymanager/rentals/list/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/companymanager//rentals/{rentalId}/return/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
 		http.authorizeRequests()
         .antMatchers(
             "/v2/api-docs", 

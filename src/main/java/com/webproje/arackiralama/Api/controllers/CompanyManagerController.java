@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,7 +18,11 @@ import com.webproje.arackiralama.Business.abstracts.CompanyManagerService;
 import com.webproje.arackiralama.Business.abstracts.VehicleService;
 import com.webproje.arackiralama.Business.constants.Messages;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.DataResult;
+import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
+import com.webproje.arackiralama.Entity.dto.carRentalsDtos.CarRentalListDto;
 import com.webproje.arackiralama.Entity.dto.vehicleDtos.VehicleDto;
+
+import io.swagger.models.Response;
 
 
 @RestController
@@ -42,6 +47,50 @@ public class CompanyManagerController {
 		}
 		else {
 			return ResponseEntity.internalServerError().body(Messages.InternalServerError);
+		}
+	}
+	
+	@GetMapping("/rentals/list")
+	public ResponseEntity<?> listRentalRequests(@RequestParam Optional<Integer> pageSize,@RequestParam Optional<Integer> pageNum){
+		DataResult<List<CarRentalListDto>> result = this.companyManagerService.listCarRentalRequests(pageSize, pageNum);
+		if(result.getSuccess()) {
+			return ResponseEntity.ok(result.getData());
+		}
+		else {
+			return ResponseEntity.internalServerError().body(Messages.InternalServerError);
+		}
+	}
+	
+	@DeleteMapping("/rentals/{requestId}/reject")
+	public ResponseEntity<?> rejectRentalRequest(@PathVariable int requestId){
+		Result result = this.companyManagerService.rejectRentalRequest(requestId);
+		if(result.getSuccess()) {
+			return ResponseEntity.ok(result.getMessage());
+		}
+		else {
+			return ResponseEntity.badRequest().body(result.getMessage());
+		}
+	}
+	
+	@PutMapping("/rentals/{requestId}/confirm")
+	public ResponseEntity<?> confirmRentalRequest(@PathVariable int requestId){
+		Result result = this.companyManagerService.confirmRentalRequest(requestId);
+		if(result.getSuccess()) {
+			return ResponseEntity.ok(result.getMessage());
+		}
+		else {
+			return ResponseEntity.badRequest().body(result.getMessage());
+		}
+	}
+	
+	@PutMapping("/rentals/{rentalId}/return")
+	public ResponseEntity<?> returnVehicle(@PathVariable int rentalId){
+		Result result = this.companyManagerService.returnVehicle(rentalId);
+		if(result.getSuccess()) {
+			return ResponseEntity.ok(result.getMessage());
+		}
+		else {
+			return ResponseEntity.badRequest().body(result.getMessage());
 		}
 	}
 		
