@@ -8,7 +8,9 @@ import com.webproje.arackiralama.Business.abstracts.AppUserService;
 import com.webproje.arackiralama.Business.abstracts.CustomerService;
 import com.webproje.arackiralama.Core.entity.concretes.AppUser;
 import com.webproje.arackiralama.Core.entity.concretes.Role;
+import com.webproje.arackiralama.Core.utilities.result.abstracts.DataResult;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
+import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessDataResult;
 import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessResult;
 import com.webproje.arackiralama.Entity.concretes.Customer;
 import com.webproje.arackiralama.Entity.dto.customerDtos.CustomerRegisterDto;
@@ -45,5 +47,13 @@ public class CustomerManager implements CustomerService{
 		this.customerRepository.save(customer);
 		return new SuccessResult(Messages.customerRegistered);
 	}
+
+	@Override
+	public DataResult<Customer> getCustomerByEmail(String customerEmail) {
+		AppUser user = this.appUserService.getUserByEmail(customerEmail).getData();
+		Customer customer = this.customerRepository.getByUser_UserId(user.getUserId());
+		return new SuccessDataResult<Customer>(customer);
+	}
+	
 
 }

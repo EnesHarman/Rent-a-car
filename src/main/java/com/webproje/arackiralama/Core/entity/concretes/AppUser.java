@@ -64,4 +64,5 @@ public class AppUser {
 	@OneToOne(mappedBy = "user")
 	private Customer customer;
 	
+	
 }

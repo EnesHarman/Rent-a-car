@@ -38,6 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/systemmanager/register/**").permitAll();
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/company/add/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/vehicle/add/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.PUT,"/api/vehicle/update/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/api/vehicle/delete/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/vehicle/rent/**").hasAnyAuthority("ROLE_CUSTOMER");
+		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/vehicle/list/**").hasAnyAuthority("ROLE_COMPANY_MANAGER, ROLE_CUSTOMER");
 		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/companymanager/vehicles/list/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
 		http.authorizeRequests()
         .antMatchers(
@@ -45,13 +49,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
             "/swagger-resources/**",  
             "/swagger-ui.html", 
             "/webjars/**" ,
-             /*Probably not needed*/ "/swagger.json")
+              "/swagger.json")
         .permitAll();
 		
 		http.authorizeRequests().anyRequest().authenticated();
 		http.addFilter(customAuthenticationFilter);
 		http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
-	}
+	} 
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {

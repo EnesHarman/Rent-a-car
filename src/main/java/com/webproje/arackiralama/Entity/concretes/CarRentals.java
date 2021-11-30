@@ -33,10 +33,13 @@ public class CarRentals {
 	
 	@Column(name="rental_date")
 	private Date rentalDate;
+	
+	@Column(name="is_approved")
+	private boolean isApproved;
 
 	@ManyToOne
-	@JoinColumn(name= "hirer_id")
-	private Customer hirer;
+	@JoinColumn(name= "customer_id")
+	private Customer customer;
 	
 	@ManyToOne
 	@JoinColumn(name="company_id")

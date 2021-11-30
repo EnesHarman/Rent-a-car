@@ -25,6 +25,11 @@ import lombok.NoArgsConstructor;
 @Table(name="customers")
 @Entity
 public class Customer {
+	
+	public Customer(int id) {
+		this.id = id;
+	}
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id")
@@ -46,6 +51,6 @@ public class Customer {
 	@JoinColumn(name="user_id")
 	private AppUser user;
 	
-	@OneToMany(mappedBy = "hirer", cascade =  CascadeType.REMOVE)
+	@OneToMany(mappedBy = "customer", cascade =  CascadeType.REMOVE)
 	private List<CarRentals> carRentals;
 }

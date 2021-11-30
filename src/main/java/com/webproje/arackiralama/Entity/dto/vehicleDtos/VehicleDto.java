@@ -27,5 +27,7 @@ public class VehicleDto {
 	private String gearType;
 	
 	private String vehicleStatus;
+	
+	private int companyId;
 
 }

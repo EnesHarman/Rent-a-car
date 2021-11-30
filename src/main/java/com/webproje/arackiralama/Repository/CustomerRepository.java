@@ -6,4 +6,6 @@ import com.webproje.arackiralama.Entity.concretes.Customer;
 
 public interface CustomerRepository extends JpaRepository<Customer, Integer> {
 
+	Customer getByUser_UserId(int userId);
+
 }

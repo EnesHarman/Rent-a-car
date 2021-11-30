@@ -1,13 +1,19 @@
 package com.webproje.arackiralama.Business.concretes;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.webproje.arackiralama.Business.abstracts.AppUserService;
+import com.webproje.arackiralama.Business.abstracts.CarRentalService;
 import com.webproje.arackiralama.Business.abstracts.CompanyManagerService;
+import com.webproje.arackiralama.Business.abstracts.CustomerService;
 import com.webproje.arackiralama.Business.abstracts.FuelTypeService;
 import com.webproje.arackiralama.Business.abstracts.GearTypeService;
 import com.webproje.arackiralama.Business.abstracts.VehicleService;
@@ -16,15 +22,19 @@ import com.webproje.arackiralama.Business.constants.Messages;
 import com.webproje.arackiralama.Core.entity.concretes.AppUser;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.DataResult;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
+import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorDataResult;
 import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorResult;
 import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessDataResult;
 import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessResult;
+import com.webproje.arackiralama.Entity.concretes.CarRentals;
 import com.webproje.arackiralama.Entity.concretes.Company;
 import com.webproje.arackiralama.Entity.concretes.CompanyManager;
+import com.webproje.arackiralama.Entity.concretes.Customer;
 import com.webproje.arackiralama.Entity.concretes.FuelType;
 import com.webproje.arackiralama.Entity.concretes.GearType;
 import com.webproje.arackiralama.Entity.concretes.Vehicle;
 import com.webproje.arackiralama.Entity.concretes.VehicleStatus;
+import com.webproje.arackiralama.Entity.dto.carRentalsDtos.CarRentalDto;
 import com.webproje.arackiralama.Entity.dto.vehicleDtos.VehicleDto;
 import com.webproje.arackiralama.Repository.CompanyManagerRepository;
 import com.webproje.arackiralama.Repository.VehicleRepository;
@@ -33,21 +43,26 @@ import com.webproje.arackiralama.Repository.VehicleRepository;
 public class VehicleManager implements VehicleService{
 
 	private final VehicleRepository vehicleRepository;
+	
 	private final GearTypeService  gearTypeService;
 	private final FuelTypeService fuelTypeService;
 	private final VehicleStatusService vehicleStatusService;
 	private final CompanyManagerService companyManagerService;
+	private final CarRentalService carRentalService;
+	private final CustomerService customerService;
 	
 	@Autowired
 	public VehicleManager(VehicleRepository vehicleRepository, GearTypeService gearTypeService,
-				FuelTypeService fuelTypeService, VehicleStatusService vehicleStatusService,CompanyManagerService companyManagerService) {
+				FuelTypeService fuelTypeService, VehicleStatusService vehicleStatusService,CompanyManagerService companyManagerService
+				,CarRentalService carRentalService,CustomerService customerService) {
 			super();
 			this.vehicleRepository = vehicleRepository;
 			this.companyManagerService = companyManagerService;
 			this.gearTypeService = gearTypeService;
 			this.fuelTypeService = fuelTypeService;
 			this.vehicleStatusService = vehicleStatusService;
-
+			this.carRentalService = carRentalService;
+			this.customerService = customerService;
 	}
 	
 	@Override
@@ -88,20 +103,94 @@ public class VehicleManager implements VehicleService{
 
 		return new SuccessResult(Messages.vehicleAdded);
 	}
-
-
+	
 	@Override
 	public Result updateVehicle(int vehicleId, VehicleDto vehicleDto) {
-		// TODO Auto-generated method stub
-		return null;
+		String managerEmail =  SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+		int companyId = this.companyManagerService.getCompanyIdByManagerEmail(managerEmail).getData();
+		
+		Vehicle  vehicle = this.vehicleRepository.getById(vehicleId);
+		if(vehicle.getCompany().getId() != companyId) {
+			return new ErrorResult(Messages.vehicleNotUpdated);
+		}
+		vehicle.setBrand(vehicleDto.getBrand());
+		vehicle.setModel(vehicleDto.getModel());
+		vehicle.setDeposit(vehicleDto.getDeposit());
+		vehicle.setKilometerLimit(vehicleDto.getKilometerLimit());
+		vehicle.setPrice(vehicleDto.getPrice());
+		vehicle.setImgUrl(vehicleDto.getImgUrl());
+		vehicle.getFuelType().setName(vehicleDto.getFuelType());
+		vehicle.getGearType().setName(vehicleDto.getGearType());
+		vehicle.getVehicleStatus().setName(vehicleDto.getVehicleStatus());
+		this.vehicleRepository.save(vehicle);
+		return new SuccessResult(Messages.vehicleUpdated);
 	}
 
 	@Override
-	public DataResult<List<VehicleDto>> listVehiclesForManager() {
+	public DataResult<List<VehicleDto>> listVehiclesForManager(Optional<Integer> pageSize,
+			Optional<Integer> pageNum) {
+		
+		int _pageSize = pageSize.isPresent() && pageSize.get()<20 && pageSize.get()>10 ?pageSize.get() : 10;
+		int _pageNum = pageNum.isPresent() && pageNum.get()>0 ? pageNum.get(): 1;
+		Pageable pageable = PageRequest.of(_pageNum-1, _pageSize);
+		
 		String managerEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		int companyId = this.companyManagerService.getCompanyIdByManagerEmail(managerEmail).getData();
-		List<VehicleDto> vehicles = this.vehicleRepository.listVehiclesForManager(companyId);
+		
+		List<VehicleDto> vehicles = this.vehicleRepository.listVehiclesByCompanyId(companyId,pageable);
 		return new SuccessDataResult<List<VehicleDto>>(vehicles);
+	}
+
+	@Override
+	public Result deleteVehicle(int vehicleId) {
+		String managerEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+		int companyId = this.companyManagerService.getCompanyIdByManagerEmail(managerEmail).getData();
+		Vehicle  vehicle = this.vehicleRepository.getById(vehicleId);
+		if(vehicle== null) {
+			return new ErrorResult(Messages.vehicleStatusNotFound);
+		}
+		if(vehicle.getCompany().getId() != companyId) {
+			return new ErrorResult(Messages.vehicleNotUpdated);
+		}
+		this.vehicleRepository.deleteById(vehicleId);
+		return new SuccessResult(Messages.vehicleDeleted);
+	}
+
+	@Override
+	public DataResult<List<VehicleDto>> listVehicles(Optional<Integer> companyId, Optional<Integer> pageSize,
+			Optional<Integer> pageNum) {
+		int _pageSize = pageSize.isPresent() && pageSize.get()<20 && pageSize.get()>10 ?pageSize.get() : 10;
+		int _pageNum = pageNum.isPresent() && pageNum.get()>0 ? pageNum.get(): 1;
+		Pageable pageable = PageRequest.of(_pageNum-1, _pageSize);
+		
+		List<VehicleDto> vehicles = new ArrayList<VehicleDto>();
+		
+		if(companyId.isPresent()) {
+			vehicles = this.vehicleRepository.listVehiclesByCompanyId(companyId.get(), pageable);
+		}
+		else {
+			vehicles = this.vehicleRepository.listVehicles(pageable);
+		}
+		return new SuccessDataResult<List<VehicleDto>>(Messages.vehiclesListed,vehicles);
+	}
+
+	@Override
+	public Result rentACar(CarRentalDto carRentalDto) {
+		String customerEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+		
+		Customer customer = this.customerService.getCustomerByEmail(customerEmail).getData();
+		
+		CarRentals rentalRequest = new CarRentals();
+		rentalRequest.setRentalPeriod(carRentalDto.getRentalPeriod());
+		rentalRequest.setRentalDate(carRentalDto.getRentalDate());
+		rentalRequest.setCompany(new Company(carRentalDto.getCompanyId()));
+		rentalRequest.setVehicle(new Vehicle(carRentalDto.getVehicleId()));
+		rentalRequest.setCustomer(customer);
+		rentalRequest.setApproved(false);		
+		
+		Result result = this.carRentalService.addCarRentalRequest(rentalRequest);
+		
+		return result;
 	}
 
 	
