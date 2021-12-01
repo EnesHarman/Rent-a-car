@@ -15,6 +15,8 @@ import com.webproje.arackiralama.Business.abstracts.CompanyManagerService;
 import com.webproje.arackiralama.Business.constants.Messages;
 import com.webproje.arackiralama.Core.entity.concretes.AppUser;
 import com.webproje.arackiralama.Core.entity.concretes.Role;
+import com.webproje.arackiralama.Core.utilities.emailSender.EmailSenderService;
+import com.webproje.arackiralama.Core.utilities.emailSender.EmailSenderServiceImp;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.DataResult;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
 import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorDataResult;
@@ -31,14 +33,17 @@ public class CompanyManagerManager implements CompanyManagerService{
 
 	private final CompanyManagerRepository companyManagerRepository;
 	private final AppUserService appUserService;
-	private final CarRentalService carRentalService; 
+	private final CarRentalService carRentalService;
+	private final EmailSenderService emailSenderService;
+
 	
 	@Autowired
-	public CompanyManagerManager(CompanyManagerRepository companyManagerRepository,AppUserService appUserService, CarRentalService carRentalService) {
+	public CompanyManagerManager(CompanyManagerRepository companyManagerRepository,AppUserService appUserService, CarRentalService carRentalService,EmailSenderService emailSenderService) {
 		super();
 		this.companyManagerRepository = companyManagerRepository;
 		this.appUserService = appUserService;
 		this.carRentalService = carRentalService;
+		this.emailSenderService = emailSenderService;
 	}
 
 	@Override
@@ -88,7 +93,8 @@ public class CompanyManagerManager implements CompanyManagerService{
 	public Result rejectRentalRequest(int requestId) {
 		String managerEmail =  SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		int companyId = this.getCompanyIdByManagerEmail(managerEmail).getData();
-		//TODO MAİL İŞLEMİ BURAYA EKLENECEK
+		DataResult<String> customerEmail = this.carRentalService.getCustomerEmailByRequestId(requestId);
+		this.emailSenderService.sendEmail(customerEmail.getData(), Messages.carRentalRequestRejectedCustomerMessage, Messages.carRentalRequestRejectedCustomerSubject);
 		Result result = this.carRentalService.deleteRentalRequestById(requestId,companyId);
 		return result;
 	}
@@ -97,7 +103,8 @@ public class CompanyManagerManager implements CompanyManagerService{
 	public Result confirmRentalRequest(int requestId) {
 		String managerEmail =  SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		int companyId = this.getCompanyIdByManagerEmail(managerEmail).getData();
-		//TODO MAİL İŞLEMİ BURAYA EKLENECEK
+		DataResult<String> customerEmail = this.carRentalService.getCustomerEmailByRequestId(requestId);
+		this.emailSenderService.sendEmail(customerEmail.getData(), Messages.carRentalRequestApprovedCustomerMessage, Messages.carRentalRequestApprovedCustomerSubject);
 		Result result = this.carRentalService.confirmRentalRequestById(requestId,companyId);
 		return result;
 	}

@@ -95,5 +95,11 @@ public class CarRentalManager  implements CarRentalService{
 		
 		this.carRentalRepository.deleteById(rentalId);
 		return new SuccessResult(Messages.vehicleReturned);
+	}
+
+	@Override
+	public DataResult<String> getCustomerEmailByRequestId(int requestId) {
+		CarRentals carRental = this.carRentalRepository.getById(requestId);
+		return new SuccessDataResult<String>("User email.",carRental.getCustomer().getUser().getEmail());
 	}	
 }

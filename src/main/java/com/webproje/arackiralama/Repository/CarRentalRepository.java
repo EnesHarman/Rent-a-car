@@ -12,8 +12,14 @@ import com.webproje.arackiralama.Entity.dto.carRentalsDtos.CarRentalListDto;
 public interface CarRentalRepository extends JpaRepository<CarRentals, Integer>{
 	
 	@Query("Select new com.webproje.arackiralama.Entity.dto.carRentalsDtos.CarRentalListDto"
-			+ " (cr.id ,cr.rentalPeriod, cr.rentalDate, cu.name, cu.surname, cu.phoneNumber, ve.id, ve.ImgUrl,"
+			+ " (cr.id ,cr.rentalPeriod, cr.rentalDate, cu.name, cu.surname,cr.isApproved, cu.phoneNumber, ve.id, ve.ImgUrl,"
 			+ "ve.brand, ve.model) From CarRentals cr Inner Join cr.customer cu Inner Join cr.vehicle ve where cr.company.id =:companyId")
 	
 	List<CarRentalListDto> getRentalRequestsByCompanyId(int companyId, Pageable pageable);
+	
+	@Query("Select new com.webproje.arackiralama.Entity.dto.carRentalsDtos.CarRentalListDto"
+			+ " (cr.id ,cr.rentalPeriod, cr.rentalDate, cu.name, cu.surname,cr.isApproved, cu.phoneNumber, ve.id, ve.ImgUrl,"
+			+ "ve.brand, ve.model) From CarRentals cr Inner Join cr.customer cu Inner Join cr.vehicle ve where cr.customer.id =:customerId")
+	
+	List<CarRentalListDto> getRentalRequestsByCustomerId(int customerId, Pageable pageable);
 }

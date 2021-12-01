@@ -20,6 +20,8 @@ public interface CarRentalService {
 	Result confirmRentalRequestById(int requestId, int companyId);
 
 	Result returnVehicle(int rentalId, int companyId);
+
+	DataResult<String> getCustomerEmailByRequestId(int requestId);
 	
 
 }

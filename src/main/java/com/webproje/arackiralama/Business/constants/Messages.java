@@ -23,6 +23,11 @@ public class Messages {
 	public static final String carRentalRequestApproved= "The rental request approved successfuly.";
 	public static final String carRentalAlreadyApproved= "Error: The rental request approved already.";
 	public static final String carRentalCannotReject= "Error: The rental request approved already. You can't reject it now.";
+	public static final String carRentalRequestRejectedCustomerSubject= "Your rental request has been rejected.";
+	public static final String carRentalRequestApprovedCustomerSubject= "Your rental request has been approved. ";
+	public static final String carRentalRequestRejectedCustomerMessage= "Your rental request has been rejected. You can rent  a different car"
+			+ " if you wish. ";
+	public static final String carRentalRequestApprovedCustomerMessage= "Your rental request has been approved. Please arrive on time to collect your vehicle. ";
 	
 	public static final String customerRegistered= "You have registed the service succesfuly.";
 	

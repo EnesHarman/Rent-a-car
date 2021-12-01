@@ -21,6 +21,8 @@ public class CarRentalListDto {
 	
 	private String customerSurname;
 	
+	private boolean isApproved;
+
 	private String customerNumber;
 
 	private int vehicleId;
@@ -30,4 +32,5 @@ public class CarRentalListDto {
 	private String brand;
 	
 	private String model;
+	
 }
