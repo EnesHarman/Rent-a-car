@@ -41,7 +41,7 @@ public class Customer {
 	@Column(name="surname", columnDefinition = "varchar(50)")
 	private String surname;
 	
-	@Column(name="identity_number", columnDefinition = "varchar(11)")
+	@Column(name="identity_number", columnDefinition = "varchar(11)" ,unique =  true)
 	private String identityNumber;
 	
 	@Column(name="phone_number", columnDefinition = "varchar(15)")

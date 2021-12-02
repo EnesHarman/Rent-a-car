@@ -42,7 +42,7 @@ public class CompanyController {
 	@ExceptionHandler(DataIntegrityViolationException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorResult handleDuplicateError(DataIntegrityViolationException exceptions){
-		return new ErrorResult("Duplicate error! There is already a company with this name. Please change your name.");
+		return new ErrorResult("Duplicate error! There is already a company with this name. Please change the company name.");
 	}
 	
 }

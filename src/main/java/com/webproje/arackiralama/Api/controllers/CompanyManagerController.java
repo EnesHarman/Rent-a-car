@@ -3,14 +3,21 @@ package com.webproje.arackiralama.Api.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.webproje.arackiralama.Business.abstracts.CompanyManagerService;
@@ -19,11 +26,9 @@ import com.webproje.arackiralama.Business.abstracts.VehicleService;
 import com.webproje.arackiralama.Business.constants.Messages;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.DataResult;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
+import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorResult;
 import com.webproje.arackiralama.Entity.dto.carRentalsDtos.CarRentalListDto;
 import com.webproje.arackiralama.Entity.dto.vehicleDtos.VehicleDto;
-
-import io.swagger.models.Response;
-
 
 @RestController
 @RequestMapping("/api/companymanager")
@@ -93,5 +98,16 @@ public class CompanyManagerController {
 			return ResponseEntity.badRequest().body(result.getMessage());
 		}
 	}
-		
+	@ExceptionHandler(EmptyResultDataAccessException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorResult handleEmptyDeleteRequest(EmptyResultDataAccessException exceptions){
+		return new ErrorResult("Error: There is no such a rental request with that id. ");
+	}
+	
+	@ExceptionHandler(EntityNotFoundException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorResult handleEntityNotFound(EntityNotFoundException exceptions){
+		return new ErrorResult("Error: There is no such a rental request with that id.");
+	}
+			
 }

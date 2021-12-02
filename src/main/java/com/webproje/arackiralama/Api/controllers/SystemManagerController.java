@@ -22,7 +22,7 @@ public class SystemManagerController {
 		super();
 		this.systemManagerService = systemManagerService;
 	}
-	//TODO Denemeler bittikten sonra kaldırılacak
+
 	@PostMapping("/register")
 	public ResponseEntity<?> registerSystemManager(@RequestBody SystemManagerRegisterDto managerRegisterDto){
 		Result result = this.systemManagerService.register(managerRegisterDto);
