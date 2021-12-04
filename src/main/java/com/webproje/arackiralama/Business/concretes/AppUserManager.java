@@ -21,7 +21,6 @@ import com.webproje.arackiralama.Repository.AppUserRepository;
 
 import lombok.extern.slf4j.Slf4j;
 
-
 @Service
 @Slf4j
 public class AppUserManager implements UserDetailsService, AppUserService{

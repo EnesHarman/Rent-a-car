@@ -19,7 +19,10 @@ import com.webproje.arackiralama.Entity.dto.carRentalsDtos.CarRentalListDto;
 import com.webproje.arackiralama.Repository.CarRentalRepository;
 import com.webproje.arackiralama.Repository.VehicleRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class CarRentalManager  implements CarRentalService{
 
 	private final CarRentalRepository carRentalRepository;
@@ -34,6 +37,7 @@ public class CarRentalManager  implements CarRentalService{
 	@Override
 	public Result addCarRentalRequest(CarRentals rentalRequest) {
 		this.carRentalRepository.save(rentalRequest);
+		log.info("A customer with "+ rentalRequest.getCustomer().getUser().getEmail() +"email has sent a rental request to "+ rentalRequest.getCompany().getCompanyName());;
 		return new SuccessResult(Messages.carRentalRequestReceived);
 	}
 
@@ -56,6 +60,8 @@ public class CarRentalManager  implements CarRentalService{
 		}
 		
 		this.carRentalRepository.deleteById(requestId);
+		
+		log.info("A rental request deleted by "+ carRental.getCompany().getCompanyName() );
 		return new SuccessResult(Messages.carRentalRequestRejected);
 	}
 
@@ -76,7 +82,7 @@ public class CarRentalManager  implements CarRentalService{
 		Vehicle vehicle = this.vehicleRepository.getById(vehicleId);
 		vehicle.setVehicleStatus(new VehicleStatus(3,"Rented"));
 		this.vehicleRepository.save(vehicle);
-		
+		log.info("A rental request confirmed by "+ carRental.getCompany().getCompanyName() );
 		return new SuccessResult(Messages.carRentalRequestApproved);
 	}
 
@@ -94,6 +100,7 @@ public class CarRentalManager  implements CarRentalService{
 		this.vehicleRepository.save(vehicle);
 		
 		this.carRentalRepository.deleteById(rentalId);
+		log.info("A vehicle returned to "+ carRental.getCompany().getCompanyName() );
 		return new SuccessResult(Messages.vehicleReturned);
 	}
 

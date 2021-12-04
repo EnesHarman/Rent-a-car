@@ -10,9 +10,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.webproje.arackiralama.Core.utilities.emailSender.EmailSenderService;
-import com.webproje.arackiralama.Core.utilities.emailSender.EmailSenderServiceImp;
-
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;

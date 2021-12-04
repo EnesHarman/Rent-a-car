@@ -32,22 +32,51 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		customAuthenticationFilter.setFilterProcessesUrl("/api/login");
 		
 		http.csrf().disable(); // bakılacak
+		http.cors().disable();//cors iptal işlemi. denenecek
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/login/**").permitAll();
+		
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/customer/register/**").permitAll();
+		
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/systemmanager/register/**").permitAll();
+		
+		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/systemmanager/company/delete/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/systemmanager/company/list/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
+		
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/company/add/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
+		
+		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/fueltype/add/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.PUT,"/api/fueltype/update/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/api/fueltype/delete/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/fueltype/list/**").permitAll();
+		
+		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/geartype/add/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.PUT,"/api/geartype/update/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/api/geartype/delete/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/geartype/list/**").permitAll();
+		
+		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/role/add/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.PUT,"/api/role/update/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/api/role/delete/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/role/list/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
+		
+		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/vehiclestatus/list/**").permitAll();
+		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/vehiclestatus/add/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.PUT,"/api/vehiclestatus/update/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/api/vehiclestatus/delete/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
+		
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/vehicle/add/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
 		http.authorizeRequests().antMatchers(HttpMethod.PUT,"/api/vehicle/update/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
 		http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/api/vehicle/delete/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
-		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/vehicle/rentals/list/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
-		http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/api/companymanager/rentals/list/{requestId}/reject/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
-		http.authorizeRequests().antMatchers(HttpMethod.PUT,"/api/companymanager/rentals/list/{requestId}/confirm/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/vehicle/rent/**").hasAnyAuthority("ROLE_CUSTOMER");
 		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/vehicle/list/**").permitAll();
+		
+		http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/api/companymanager/rentals/list/{requestId}/reject/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.PUT,"/api/companymanager/rentals/list/{requestId}/confirm/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
 		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/companymanager/vehicles/list/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
 		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/companymanager/rentals/list/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
 		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/companymanager//rentals/{rentalId}/return/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
+		
 		http.authorizeRequests()
         .antMatchers(
             "/v2/api-docs", 

@@ -24,7 +24,10 @@ import com.webproje.arackiralama.Entity.dto.customerDtos.CustomerRegisterDto;
 import com.webproje.arackiralama.Repository.CarRentalRepository;
 import com.webproje.arackiralama.Repository.CustomerRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class CustomerManager implements CustomerService{
 
 	private final CustomerRepository customerRepository;
@@ -55,6 +58,7 @@ public class CustomerManager implements CustomerService{
 		customer.setUser(insertedUser);
 		
 		this.customerRepository.save(customer);
+		log.info("A customer registered to the service with "+ customer.getUser().getEmail()+ " email.");
 		return new SuccessResult(Messages.customerRegistered);
 	}
 
@@ -62,6 +66,7 @@ public class CustomerManager implements CustomerService{
 	public DataResult<Customer> getCustomerByEmail(String customerEmail) {
 		AppUser user = this.appUserService.getUserByEmail(customerEmail).getData();
 		Customer customer = this.customerRepository.getByUser_UserId(user.getUserId());
+		log.info("Customer with "+user.getEmail()+ " email has been listed.");
 		return new SuccessDataResult<Customer>(customer);
 	}
 
@@ -74,7 +79,15 @@ public class CustomerManager implements CustomerService{
 		String customerEmail = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		Customer customer = this.getCustomerByEmail(customerEmail).getData();
 		List<CarRentalListDto> carRentalListDto = this.carRentalRepository.getRentalRequestsByCustomerId(customer.getId(), pageable);
+		
+		log.info("The customer with "+customerEmail+" email has listed his/her rental requests.");
 		return new SuccessDataResult<List<CarRentalListDto>>(carRentalListDto);
+	}
+
+	@Override
+	public DataResult<CarRentalListDto> listSingleRentalRequest(int rentalId) {
+		CarRentalListDto carRentalListDto = this.carRentalRepository.listSingleRentalRequest(rentalId);
+		return new SuccessDataResult<CarRentalListDto>(carRentalListDto);
 	}
 	
 

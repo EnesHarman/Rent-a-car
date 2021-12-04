@@ -3,9 +3,6 @@ package com.webproje.arackiralama.Business.abstracts;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.web.bind.annotation.RequestParam;
-
-import com.webproje.arackiralama.Core.entity.concretes.AppUser;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.DataResult;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
 import com.webproje.arackiralama.Entity.concretes.Customer;
@@ -19,5 +16,7 @@ public interface CustomerService {
 	DataResult<Customer> getCustomerByEmail(String customerEmail);
 
 	DataResult<List<CarRentalListDto>> listRentalRequests( Optional<Integer> pageSize, Optional<Integer> pageNum);
+
+	DataResult<CarRentalListDto> listSingleRentalRequest(int rentalId);
 
 }

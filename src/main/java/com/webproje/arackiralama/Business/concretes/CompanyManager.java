@@ -10,12 +10,16 @@ import com.webproje.arackiralama.Business.abstracts.CompanyService;
 import com.webproje.arackiralama.Business.constants.Messages;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.DataResult;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
+import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessDataResult;
 import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessResult;
 import com.webproje.arackiralama.Entity.concretes.City;
 import com.webproje.arackiralama.Entity.concretes.Company;
 import com.webproje.arackiralama.Entity.dto.companyDtos.CompanyAddDto;
-import com.webproje.arackiralama.Entity.dto.vehicleDtos.VehicleDto;
+
 import com.webproje.arackiralama.Repository.CompanyRepository;
+
+import lombok.extern.slf4j.Slf4j;
+@Slf4j
 @Service
 public class CompanyManager implements CompanyService{
 	private final CompanyRepository companyRepository;
@@ -42,7 +46,20 @@ public class CompanyManager implements CompanyService{
 		Company insertedCompany = this.companyRepository.save(company);
 		Result result = this.companyManagerService.addCompanyManager(companyAddDto.getCompanyManagerRegisterDto(), insertedCompany.getId());
 		
+		log.info("A company added to the service with "+ company.getCompanyName()+ " name.");
 		return new SuccessResult(Messages.companyAdded + "\n " + result.getMessage());
+	}
+
+	@Override
+	public Result deleteCompany(int companyId) {
+		this.companyRepository.deleteById(companyId);
+		log.info("A company with "+companyId+" id has been deleted.");
+		return new SuccessResult(Messages.companyDeleted);
+	}
+
+	@Override
+	public DataResult<List<Company>> listCompany() {
+		return new SuccessDataResult<List<Company>>(this.companyRepository.findAll());
 	}
 
 }

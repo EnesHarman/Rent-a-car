@@ -16,7 +16,6 @@ import com.webproje.arackiralama.Business.constants.Messages;
 import com.webproje.arackiralama.Core.entity.concretes.AppUser;
 import com.webproje.arackiralama.Core.entity.concretes.Role;
 import com.webproje.arackiralama.Core.utilities.emailSender.EmailSenderService;
-import com.webproje.arackiralama.Core.utilities.emailSender.EmailSenderServiceImp;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.DataResult;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
 import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorDataResult;
@@ -28,7 +27,10 @@ import com.webproje.arackiralama.Entity.dto.carRentalsDtos.CarRentalListDto;
 import com.webproje.arackiralama.Entity.dto.companyManagerDtos.CompanyManagerRegisterDto;
 import com.webproje.arackiralama.Repository.CompanyManagerRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class CompanyManagerManager implements CompanyManagerService{
 
 	private final CompanyManagerRepository companyManagerRepository;
@@ -58,6 +60,9 @@ public class CompanyManagerManager implements CompanyManagerService{
 		companyManager.setCompany(new Company(companyId));
 		companyManager.setAppUser(insertedUser);
 		this.companyManagerRepository.save(companyManager);
+		
+		log.info("A company manager has added to the service with this information:\nEmail : "+companyManagerRegisterDto.getEmail());
+		
 		return new SuccessResult(Messages.companyManagerAdded);
 	}
 
@@ -81,9 +86,11 @@ public class CompanyManagerManager implements CompanyManagerService{
 		DataResult<List<CarRentalListDto>> requestResult = this.carRentalService.getRentalRequestsByCompanyId(companyId, pageable);
 		
 		if(requestResult.getSuccess()) {
+			log.info("Rental requests listed by "+ managerEmail);
 			return new SuccessDataResult<List<CarRentalListDto>>(requestResult.getData());
 		}
 		else {
+			log.error("An error occurred while listing car rental requests. Error: "+ requestResult.getMessage());
 			return new ErrorDataResult<List<CarRentalListDto>>(requestResult.getMessage());
 		}
 		
@@ -96,6 +103,7 @@ public class CompanyManagerManager implements CompanyManagerService{
 		DataResult<String> customerEmail = this.carRentalService.getCustomerEmailByRequestId(requestId);
 		this.emailSenderService.sendEmail(customerEmail.getData(), Messages.carRentalRequestRejectedCustomerMessage, Messages.carRentalRequestRejectedCustomerSubject);
 		Result result = this.carRentalService.deleteRentalRequestById(requestId,companyId);
+		log.info("A rental requests rejected by "+ managerEmail);
 		return result;
 	}
 
@@ -106,6 +114,7 @@ public class CompanyManagerManager implements CompanyManagerService{
 		DataResult<String> customerEmail = this.carRentalService.getCustomerEmailByRequestId(requestId);
 		this.emailSenderService.sendEmail(customerEmail.getData(), Messages.carRentalRequestApprovedCustomerMessage, Messages.carRentalRequestApprovedCustomerSubject);
 		Result result = this.carRentalService.confirmRentalRequestById(requestId,companyId);
+		log.info("A rental requests corfirmed by "+ managerEmail);
 		return result;
 	}
 
@@ -114,7 +123,7 @@ public class CompanyManagerManager implements CompanyManagerService{
 		String managerEmail =  SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		int companyId = this.getCompanyIdByManagerEmail(managerEmail).getData();
 		Result result = this.carRentalService.returnVehicle(rentalId, companyId);
-		
+		log.info("Car returned by "+managerEmail);
 		return result;
 	}
 	

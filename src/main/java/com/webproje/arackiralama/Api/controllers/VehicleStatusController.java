@@ -1,13 +1,10 @@
 package com.webproje.arackiralama.Api.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.EntityNotFoundException;
 
-
-import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,33 +16,29 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.webproje.arackiralama.Business.abstracts.VehicleService;
+import com.webproje.arackiralama.Business.abstracts.VehicleStatusService;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.DataResult;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
 import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorResult;
-import com.webproje.arackiralama.Entity.dto.carRentalsDtos.CarRentalDto;
-import com.webproje.arackiralama.Entity.dto.vehicleDtos.VehicleDto;
-
+import com.webproje.arackiralama.Entity.concretes.VehicleStatus;
 
 @RestController
-@RequestMapping("/api/vehicle")
-public class VehicleController {
+@RequestMapping(value="/api/vehiclestatus")
+public class VehicleStatusController {
 
-	private VehicleService vehicleService;
+	private final VehicleStatusService vehicleStatusService;
 
-	@Autowired
-	public VehicleController(VehicleService vehicleService) {
+	public VehicleStatusController(VehicleStatusService vehicleStatusService) {
 		super();
-		this.vehicleService = vehicleService;
+		this.vehicleStatusService = vehicleStatusService;
 	}
 	
 	@PostMapping("/add")
-	public ResponseEntity<?> addVehicle(@RequestBody VehicleDto vehicleDto){
-		Result result = this.vehicleService.addVehicle(vehicleDto);
+	public ResponseEntity<?> addVehicleStatus(@RequestBody VehicleStatus vehicleStatus){
+		Result result = this.vehicleStatusService.addVehicleStatus(vehicleStatus);
 		if(result.getSuccess()) {
 			return ResponseEntity.ok(result.getMessage());
 		}
@@ -54,9 +47,9 @@ public class VehicleController {
 		}
 	}
 	
-	@PutMapping("/update/{vehicleId}")
-	public ResponseEntity<?> updateVehicle(@PathVariable int vehicleId, @RequestBody VehicleDto vehicleDto ){
-		Result result = this.vehicleService.updateVehicle(vehicleId,vehicleDto);
+	@PutMapping("/update")
+	public ResponseEntity<?> updateVehicleStatus(@RequestBody VehicleStatus vehicleStatus){
+		Result result = this.vehicleStatusService.updateVehicleStatus(vehicleStatus);
 		if(result.getSuccess()) {
 			return ResponseEntity.ok(result.getMessage());
 		}
@@ -65,9 +58,9 @@ public class VehicleController {
 		}
 	}
 	
-	@DeleteMapping("/delete/{vehicleId}")
-	public ResponseEntity<?> deleteVehicle(@PathVariable int vehicleId){
-		Result result = this.vehicleService.deleteVehicle(vehicleId);
+	@DeleteMapping("/delete/id")
+	public ResponseEntity<?> deleteVehicleStatus(@PathVariable int id){
+		Result result = this.vehicleStatusService.deleteVehicleStatus(id);
 		if(result.getSuccess()) {
 			return ResponseEntity.ok(result.getMessage());
 		}
@@ -77,20 +70,8 @@ public class VehicleController {
 	}
 	
 	@GetMapping("/list")
-	public ResponseEntity<?> listVehicles(@RequestParam Optional<Integer> companyId, 
-			@RequestParam Optional<Integer> pageSize, @RequestParam Optional<Integer> pageNum){
-		DataResult<List<VehicleDto>> result = this.vehicleService.listVehicles(companyId, pageSize, pageNum);
-		if(result.getSuccess()) {
-			return ResponseEntity.ok(result.getData());
-		}
-		else {
-			return ResponseEntity.badRequest().body(result.getMessage());
-		}
-	} 
-	
-	@PostMapping("/rent")
-	public ResponseEntity<?> rentACar(@RequestBody CarRentalDto carRentalDto){
-		Result result = this.vehicleService.rentACar(carRentalDto);
+	public ResponseEntity<?> listVehicleStatus(){
+		DataResult<List<VehicleStatus>> result = this.vehicleStatusService.listVehicleStatus();
 		if(result.getSuccess()) {
 			return ResponseEntity.ok(result.getMessage());
 		}
@@ -99,17 +80,21 @@ public class VehicleController {
 		}
 	}
 	
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	public ErrorResult handleDuplicateError(DataIntegrityViolationException exceptions){
+		return new ErrorResult("Duplicate error! There is already a vehicle status with these informations. Please check your email and identity number.");
+	}
+	
 	@ExceptionHandler(EmptyResultDataAccessException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorResult handleEmptyDeleteRequest(EmptyResultDataAccessException exceptions){
-		return new ErrorResult("Error: There is no such a vehicle  with that id. ");
+		return new ErrorResult("Error: There is no such a vehicle status with that id. ");
 	}
 	
 	@ExceptionHandler(EntityNotFoundException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public ErrorResult handleEntityNotFound(EntityNotFoundException exceptions){
-		return new ErrorResult("Error: There is no such a vehicle with that id.");
+		return new ErrorResult("Error: There is no such a vehicle status with that id.");
 	}
-	
-	
 }

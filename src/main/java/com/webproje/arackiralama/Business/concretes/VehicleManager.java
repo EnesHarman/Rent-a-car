@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import com.webproje.arackiralama.Business.abstracts.AppUserService;
+
 import com.webproje.arackiralama.Business.abstracts.CarRentalService;
 import com.webproje.arackiralama.Business.abstracts.CompanyManagerService;
 import com.webproje.arackiralama.Business.abstracts.CustomerService;
@@ -19,16 +19,16 @@ import com.webproje.arackiralama.Business.abstracts.GearTypeService;
 import com.webproje.arackiralama.Business.abstracts.VehicleService;
 import com.webproje.arackiralama.Business.abstracts.VehicleStatusService;
 import com.webproje.arackiralama.Business.constants.Messages;
-import com.webproje.arackiralama.Core.entity.concretes.AppUser;
+
 import com.webproje.arackiralama.Core.utilities.result.abstracts.DataResult;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
-import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorDataResult;
+
 import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorResult;
 import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessDataResult;
 import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessResult;
 import com.webproje.arackiralama.Entity.concretes.CarRentals;
 import com.webproje.arackiralama.Entity.concretes.Company;
-import com.webproje.arackiralama.Entity.concretes.CompanyManager;
+
 import com.webproje.arackiralama.Entity.concretes.Customer;
 import com.webproje.arackiralama.Entity.concretes.FuelType;
 import com.webproje.arackiralama.Entity.concretes.GearType;
@@ -36,10 +36,13 @@ import com.webproje.arackiralama.Entity.concretes.Vehicle;
 import com.webproje.arackiralama.Entity.concretes.VehicleStatus;
 import com.webproje.arackiralama.Entity.dto.carRentalsDtos.CarRentalDto;
 import com.webproje.arackiralama.Entity.dto.vehicleDtos.VehicleDto;
-import com.webproje.arackiralama.Repository.CompanyManagerRepository;
+
 import com.webproje.arackiralama.Repository.VehicleRepository;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class VehicleManager implements VehicleService{
 
 	private final VehicleRepository vehicleRepository;
@@ -100,7 +103,7 @@ public class VehicleManager implements VehicleService{
 		vehicle.setCompany(company);
 
 		this.vehicleRepository.save(vehicle);
-
+		log.info("A company manager with "+ managerEmail + " has added a car to the system.");
 		return new SuccessResult(Messages.vehicleAdded);
 	}
 	
@@ -123,6 +126,8 @@ public class VehicleManager implements VehicleService{
 		vehicle.getGearType().setName(vehicleDto.getGearType());
 		vehicle.getVehicleStatus().setName(vehicleDto.getVehicleStatus());
 		this.vehicleRepository.save(vehicle);
+		
+		log.info("A company manager with "+ managerEmail + " has updated a car.");
 		return new SuccessResult(Messages.vehicleUpdated);
 	}
 
@@ -138,6 +143,7 @@ public class VehicleManager implements VehicleService{
 		int companyId = this.companyManagerService.getCompanyIdByManagerEmail(managerEmail).getData();
 		
 		List<VehicleDto> vehicles = this.vehicleRepository.listVehiclesByCompanyId(companyId,pageable);
+		log.info("A company manager with "+ managerEmail + " has listed cars.");
 		return new SuccessDataResult<List<VehicleDto>>(vehicles);
 	}
 
@@ -153,6 +159,7 @@ public class VehicleManager implements VehicleService{
 			return new ErrorResult(Messages.vehicleNotUpdated);
 		}
 		this.vehicleRepository.deleteById(vehicleId);
+		log.info("A company manager with "+ managerEmail + " has deleted a car.");
 		return new SuccessResult(Messages.vehicleDeleted);
 	}
 
@@ -191,7 +198,7 @@ public class VehicleManager implements VehicleService{
 		rentalRequest.setApproved(false);		
 		
 		Result result = this.carRentalService.addCarRentalRequest(rentalRequest);
-		
+		log.info("A customer with "+ customerEmail + " has send a rental request.");
 		return result;
 	}
 

@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,6 +52,17 @@ public class CustomerController {
 	@GetMapping("/rentals/list")
 	public ResponseEntity<?> listRentalRequests(@RequestParam Optional<Integer> pageSize,@RequestParam Optional<Integer> pageNum){
 		 DataResult<List<CarRentalListDto>> result=  this.customerService.listRentalRequests(pageSize,pageNum);
+		 if(result.getSuccess()) {
+			 return ResponseEntity.ok(result.getData());
+		 }
+		 else {
+			 return ResponseEntity.badRequest().body(result.getMessage());
+		 }
+	}
+	
+	@GetMapping("/rentals/list/{rentalId}")
+	public ResponseEntity<?> listSingleRentalRequest(@PathVariable int rentalId){
+		 DataResult<CarRentalListDto> result=  this.customerService.listSingleRentalRequest(rentalId);
 		 if(result.getSuccess()) {
 			 return ResponseEntity.ok(result.getData());
 		 }

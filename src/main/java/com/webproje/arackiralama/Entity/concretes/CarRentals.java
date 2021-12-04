@@ -11,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.webproje.arackiralama.Core.entity.concretes.AppUser;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
