@@ -54,16 +54,5 @@ public class SystemManagerController {
 			return ResponseEntity.badRequest().body(result.getMessage());
 		}
 	}
-	
-	@GetMapping("/company/list")
-	public ResponseEntity<?> listCompany(){
-		DataResult<List<Company>> result = this.companyService.listCompany();
-		if(result.getSuccess()) {
-			return ResponseEntity.ok(result.getMessage());
-		}
-		else {
-			return ResponseEntity.badRequest().body(result.getMessage());
-		}
-	}
-	
+		
 }

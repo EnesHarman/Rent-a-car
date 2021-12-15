@@ -1,6 +1,8 @@
 package com.webproje.arackiralama.Business.concretes;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,7 @@ import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessResult;
 import com.webproje.arackiralama.Entity.concretes.City;
 import com.webproje.arackiralama.Entity.concretes.Company;
 import com.webproje.arackiralama.Entity.dto.companyDtos.CompanyAddDto;
-
+import com.webproje.arackiralama.Entity.dto.companyDtos.CompanyListDto;
 import com.webproje.arackiralama.Repository.CompanyRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -58,8 +60,16 @@ public class CompanyManager implements CompanyService{
 	}
 
 	@Override
-	public DataResult<List<Company>> listCompany() {
-		return new SuccessDataResult<List<Company>>(this.companyRepository.findAll());
+	public DataResult<List<CompanyListDto>> listCompany(Optional<Integer> companyId) {
+		List<CompanyListDto> companies = new ArrayList<CompanyListDto>();
+		if(companyId.isPresent()) {
+			companies.add(this.companyRepository.listSingCompany(companyId.get()));
+		}
+		else {
+			companies = this.companyRepository.listAllCompanies();
+		}
+		return new SuccessDataResult<List<CompanyListDto>>(companies);
 	}
+
 
 }

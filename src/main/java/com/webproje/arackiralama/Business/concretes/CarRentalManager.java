@@ -99,7 +99,7 @@ public class CarRentalManager  implements CarRentalService{
 		vehicle.setVehicleStatus(new VehicleStatus(1,"Rentable"));
 		this.vehicleRepository.save(vehicle);
 		
-		this.carRentalRepository.deleteById(rentalId);
+		this.carRentalRepository.deleteById(rentalId); 
 		log.info("A vehicle returned to "+ carRental.getCompany().getCompanyName() );
 		return new SuccessResult(Messages.vehicleReturned);
 	}

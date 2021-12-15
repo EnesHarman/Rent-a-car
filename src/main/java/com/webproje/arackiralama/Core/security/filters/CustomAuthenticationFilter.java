@@ -22,7 +22,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.webproje.arackiralama.Core.security.constants.SecurityConstants;
 
 
-
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
 
 	private final AuthenticationManager authenticationManager;
@@ -35,7 +34,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException {
-		System.out.println(System.currentTimeMillis());
 		String username = request.getParameter("email");
 		String password = request.getParameter("password");
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);

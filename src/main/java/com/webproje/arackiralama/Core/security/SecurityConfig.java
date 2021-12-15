@@ -11,6 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 
 import com.webproje.arackiralama.Core.security.filters.CustomAuthenticationFilter;
 import com.webproje.arackiralama.Core.security.filters.CustomAuthorizationFilter;
@@ -31,8 +32,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
 		customAuthenticationFilter.setFilterProcessesUrl("/api/login");
 		
-		http.csrf().disable(); // bakılacak
-		http.cors().disable();//cors iptal işlemi. denenecek
+		http.csrf().disable(); 
+		http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()); //CORS CONFIG
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/login/**").permitAll();
 		
@@ -41,9 +42,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/systemmanager/register/**").permitAll();
 		
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/systemmanager/company/delete/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
-		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/systemmanager/company/list/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
 		
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/company/add/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/company/list/**").permitAll();
 		
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/fueltype/add/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
 		http.authorizeRequests().antMatchers(HttpMethod.PUT,"/api/fueltype/update/**").hasAnyAuthority("ROLE_SYSTEM_MANAGER");
@@ -76,6 +77,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/companymanager/vehicles/list/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
 		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/companymanager/rentals/list/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
 		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/companymanager//rentals/{rentalId}/return/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
+		
+		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/city/list/**").permitAll();
 		
 		http.authorizeRequests()
         .antMatchers(
