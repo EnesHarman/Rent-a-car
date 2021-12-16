@@ -31,6 +31,11 @@ public class VehicleStatus {
 		this.name = name;
 	}
 	
+	public VehicleStatus(int id) {
+		this.id = id;
+
+	}
+	
 	@Id
 	@Column(name="id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

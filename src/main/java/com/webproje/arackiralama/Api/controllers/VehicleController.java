@@ -77,9 +77,11 @@ public class VehicleController {
 	}
 	
 	@GetMapping("/list")
-	public ResponseEntity<?> listVehicles(@RequestParam Optional<Integer> companyId, 
+	public ResponseEntity<?> listVehicles(
+			@RequestParam Optional<Integer> companyId,@RequestParam Optional<Integer> cityId, 
 			@RequestParam Optional<Integer> pageSize, @RequestParam Optional<Integer> pageNum){
-		DataResult<List<VehicleDto>> result = this.vehicleService.listVehicles(companyId, pageSize, pageNum);
+		
+		DataResult<List<VehicleDto>> result = this.vehicleService.listVehicles(companyId,cityId, pageSize, pageNum);
 		if(result.getSuccess()) {
 			return ResponseEntity.ok(result.getData());
 		}
@@ -87,6 +89,17 @@ public class VehicleController {
 			return ResponseEntity.badRequest().body(result.getMessage());
 		}
 	} 
+	
+	@GetMapping("/details/{vehicleId}")
+	public ResponseEntity<?> listSingleVehicle(@PathVariable Optional<Integer> vehicleId){
+		DataResult<VehicleDto> result = this.vehicleService.listSingleVehicle(vehicleId);
+		if(result.getSuccess()) {
+			return ResponseEntity.ok(result.getData());
+		}
+		else {
+			return ResponseEntity.badRequest().body(result.getMessage());
+		}
+	}
 	
 	@PostMapping("/rent")
 	public ResponseEntity<?> rentACar(@RequestBody CarRentalDto carRentalDto){

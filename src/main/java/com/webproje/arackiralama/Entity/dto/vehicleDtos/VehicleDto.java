@@ -24,7 +24,7 @@ public class VehicleDto {
 	
 	private String fuelType;
 	
-	private String gearType;
+	private String  gearType;
 	
 	private String vehicleStatus;
 	

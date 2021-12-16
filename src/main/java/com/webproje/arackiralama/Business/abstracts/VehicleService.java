@@ -19,9 +19,11 @@ public interface VehicleService {
 
 	Result deleteVehicle(int vehicleId);
 
-	DataResult<List<VehicleDto>> listVehicles(Optional<Integer> companyId, Optional<Integer> pageSize,
+	DataResult<List<VehicleDto>> listVehicles(Optional<Integer> companyId,Optional<Integer> cityId, Optional<Integer> pageSize,
 			Optional<Integer> pageNum);
 
 	Result rentACar(CarRentalDto carRentalDto);
+
+	DataResult<VehicleDto> listSingleVehicle(Optional<Integer> vehicleId);
 
 }

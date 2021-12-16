@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.webproje.arackiralama.Core.security.constants.SecurityConstants;
+import com.webproje.arackiralama.Entity.dto.auth.LoginSuccessDto;
 
 
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
@@ -37,7 +38,8 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 		String username = request.getParameter("email");
 		String password = request.getParameter("password");
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
-		return this.authenticationManager.authenticate(authenticationToken);
+		Authentication auth = this.authenticationManager.authenticate(authenticationToken);
+		return auth;
 	}
 
 	@Override
@@ -51,8 +53,11 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 				.withIssuer(request.getRequestURI().toString())
 				.withClaim("role",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
 				.sign(algorithm);
-		
+		LoginSuccessDto loginSuccessDto = new LoginSuccessDto();
+
 		response.setHeader("Token", access_token);
+		response.setHeader("Role",user.getAuthorities().toString());
+		
 	}
 	
 	@Override

@@ -12,11 +12,12 @@ import com.webproje.arackiralama.Entity.dto.companyManagerDtos.CompanyManagerReg
 
 
 public interface CompanyManagerService {
-	Result addCompanyManager(CompanyManagerRegisterDto companyManagerRegisterDto, int companyId);
+
 	DataResult<Integer> getCompanyIdByManagerEmail(String email);
 	DataResult<List<CarRentalListDto>> listCarRentalRequests(Optional<Integer> pageSize, Optional<Integer> pageNum);
 	Result rejectRentalRequest(int requestId);
 	Result confirmRentalRequest(int requestId);
 	Result returnVehicle(int rentalId);
+	Result register(CompanyManagerRegisterDto companyManagerRegisterDto);
 
 }

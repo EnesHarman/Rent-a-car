@@ -22,7 +22,7 @@ import com.webproje.arackiralama.Business.constants.Messages;
 
 import com.webproje.arackiralama.Core.utilities.result.abstracts.DataResult;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
-
+import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorDataResult;
 import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorResult;
 import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessDataResult;
 import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessResult;
@@ -164,8 +164,10 @@ public class VehicleManager implements VehicleService{
 	}
 
 	@Override
-	public DataResult<List<VehicleDto>> listVehicles(Optional<Integer> companyId, Optional<Integer> pageSize,
+	public DataResult<List<VehicleDto>> listVehicles(Optional<Integer> companyId,Optional<Integer> cityId, Optional<Integer> pageSize,
 			Optional<Integer> pageNum) {
+		int cityid = cityId.isPresent()? cityId.get() : 35;
+		System.out.println(cityid);
 		int vehicleStatusRentableId = 1;
 		
 		int _pageSize = pageSize.isPresent() && pageSize.get()<20 && pageSize.get()>10 ?pageSize.get() : 10;
@@ -178,7 +180,7 @@ public class VehicleManager implements VehicleService{
 			vehicles = this.vehicleRepository.listVehiclesByCompanyId(companyId.get(), pageable,vehicleStatusRentableId);
 		}
 		else {
-			vehicles = this.vehicleRepository.listVehicles(pageable,vehicleStatusRentableId);
+			vehicles = this.vehicleRepository.listVehicles(cityid,pageable,vehicleStatusRentableId);
 		}
 		return new SuccessDataResult<List<VehicleDto>>(Messages.vehiclesListed,vehicles);
 	}
@@ -200,6 +202,20 @@ public class VehicleManager implements VehicleService{
 		Result result = this.carRentalService.addCarRentalRequest(rentalRequest);
 		log.info("A customer with "+ customerEmail + " has send a rental request.");
 		return result;
+	}
+
+	@Override
+	public DataResult<VehicleDto> listSingleVehicle(Optional<Integer> vehicleId) {
+		if(!vehicleId.isPresent()) {
+			return new ErrorDataResult<VehicleDto>(Messages.vehicleIdCannotBeNull);
+		}
+		VehicleDto vehicle = this.vehicleRepository.listSİngleVehicle(vehicleId.get());
+		if(vehicle == null) {
+			return new ErrorDataResult<VehicleDto>(Messages.vehicleNotFound);
+		}
+
+		return new SuccessDataResult<VehicleDto>(vehicle);
+
 	}
 
 	

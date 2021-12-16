@@ -1,5 +1,13 @@
 package com.webproje.arackiralama.Core.security;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,7 +19,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.webproje.arackiralama.Core.security.filters.CustomAuthenticationFilter;
 import com.webproje.arackiralama.Core.security.filters.CustomAuthorizationFilter;
@@ -27,15 +39,35 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	private final UserDetailsService userDetailsService;
 	private final BCryptPasswordEncoder bCryptPasswordEncoder;
 	
+	
+	
+	@Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(false);
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("OPTIONS");
+        config.addAllowedMethod("HEAD");
+        config.addAllowedMethod("GET");
+        config.addAllowedMethod("PUT");
+        config.addAllowedMethod("POST");
+        config.addAllowedMethod("DELETE");
+        config.addAllowedMethod("PATCH");
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
+    }
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
-		customAuthenticationFilter.setFilterProcessesUrl("/api/login");
+//		CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
+//		customAuthenticationFilter.setFilterProcessesUrl("/api/login");
+		http.csrf().disable();
+		http.cors();
 		
-		http.csrf().disable(); 
-		http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues()); //CORS CONFIG
 		http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/login/**").permitAll();
+		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/auth/login/**").permitAll();
 		
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/customer/register/**").permitAll();
 		
@@ -71,12 +103,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/api/vehicle/delete/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
 		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/vehicle/rent/**").hasAnyAuthority("ROLE_CUSTOMER");
 		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/vehicle/list/**").permitAll();
+		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/vehicle/details/**").permitAll();
 		
 		http.authorizeRequests().antMatchers(HttpMethod.DELETE,"/api/companymanager/rentals/list/{requestId}/reject/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
 		http.authorizeRequests().antMatchers(HttpMethod.PUT,"/api/companymanager/rentals/list/{requestId}/confirm/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
 		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/companymanager/vehicles/list/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
 		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/companymanager/rentals/list/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
-		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/companymanager//rentals/{rentalId}/return/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/companymanager/rentals/{rentalId}/return/**").hasAnyAuthority("ROLE_COMPANY_MANAGER");
+		http.authorizeRequests().antMatchers(HttpMethod.POST,"/api/companymanager/register/**").permitAll();
 		
 		http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/city/list/**").permitAll();
 		
@@ -90,18 +124,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         .permitAll();
 		
 		http.authorizeRequests().anyRequest().authenticated();
-		http.addFilter(customAuthenticationFilter);
+		//http.addFilter(customAuthenticationFilter);
 		http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 	} 
+	
 	
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
 	}
 	
+	
+	
 	@Bean
 	@Override
 	public AuthenticationManager authenticationManagerBean() throws Exception{
 		return super.authenticationManagerBean();
 	}
+	
 }

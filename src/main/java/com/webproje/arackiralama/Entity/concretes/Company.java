@@ -56,6 +56,9 @@ public class Company {
 	@Column(name="phone_number" , nullable = false, columnDefinition = "varchar(15)")
 	private String phoneNumber;
 	
+	@Column(name="manager_email",nullable =  false, columnDefinition = "nvarchar(90)", unique = true)
+	private String managerEmail;
+	
 	@ManyToOne
 	@JoinColumn(name="city_id")
 	private City city;

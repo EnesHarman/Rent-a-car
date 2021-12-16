@@ -53,4 +53,10 @@ public class Messages {
 	public static final String fuelTypeNotFound = "There is no fuel type with that name. Please check your input.";
 	
 	public static final String companyDeleted = "The company has been deleted successfuly.";
+	public static final String vehicleIdCannotBeNull = "Error: Vehicle id can not be null.";
+	public static final String companyNotExist = "The company not exist. Please check your input.";
+	public static final String companyHasManager = "The company has a manager. Please check your input.";
+	public static final String companyAddedServiceEmailBody = "Your company has added to the service. You can register as a manager to the service with this email adress.";
+	public static final String companyAddedServiceEmailSubject = "Your company has added to the service. Please register.";
+	public static final String companyManagerEmailError = "This company has different manager email. Please check your input.";
 }

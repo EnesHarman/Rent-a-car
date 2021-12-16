@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -27,6 +29,7 @@ import com.webproje.arackiralama.Core.utilities.result.abstracts.DataResult;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
 import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorResult;
 import com.webproje.arackiralama.Entity.dto.carRentalsDtos.CarRentalListDto;
+import com.webproje.arackiralama.Entity.dto.companyManagerDtos.CompanyManagerRegisterDto;
 import com.webproje.arackiralama.Entity.dto.vehicleDtos.VehicleDto;
 
 @RestController
@@ -41,6 +44,19 @@ public class CompanyManagerController {
 		super();
 		this.companyManagerService = companyManagerService;
 		this.vehicleService = vehicleService;
+	}
+	
+	
+	@PostMapping("/register")
+	public ResponseEntity<?> register(@RequestBody CompanyManagerRegisterDto companyManagerRegisterDto){
+		Result result = this.companyManagerService.register(companyManagerRegisterDto);
+		if(result.getSuccess()) {
+			return ResponseEntity.ok(result.getMessage());
+		}
+		else {
+
+			return ResponseEntity.badRequest().body(result.getMessage());
+		}
 	}
 	
 	@GetMapping("/vehicles/list")

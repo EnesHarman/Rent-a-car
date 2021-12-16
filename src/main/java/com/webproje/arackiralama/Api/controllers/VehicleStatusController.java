@@ -73,7 +73,7 @@ public class VehicleStatusController {
 	public ResponseEntity<?> listVehicleStatus(){
 		DataResult<List<VehicleStatus>> result = this.vehicleStatusService.listVehicleStatus();
 		if(result.getSuccess()) {
-			return ResponseEntity.ok(result.getMessage());
+			return ResponseEntity.ok(result.getData());
 		}
 		else {
 			return ResponseEntity.badRequest().body(result.getMessage());

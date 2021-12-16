@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import com.webproje.arackiralama.Business.abstracts.AppUserService;
 import com.webproje.arackiralama.Business.abstracts.CarRentalService;
 import com.webproje.arackiralama.Business.abstracts.CompanyManagerService;
+import com.webproje.arackiralama.Business.abstracts.CompanyService;
+import com.webproje.arackiralama.Business.constants.CompanyPoints;
 import com.webproje.arackiralama.Business.constants.Messages;
 import com.webproje.arackiralama.Core.entity.concretes.AppUser;
 import com.webproje.arackiralama.Core.entity.concretes.Role;
@@ -19,6 +21,7 @@ import com.webproje.arackiralama.Core.utilities.emailSender.EmailSenderService;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.DataResult;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
 import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorDataResult;
+import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorResult;
 import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessDataResult;
 import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessResult;
 import com.webproje.arackiralama.Entity.concretes.Company;
@@ -37,35 +40,52 @@ public class CompanyManagerManager implements CompanyManagerService{
 	private final AppUserService appUserService;
 	private final CarRentalService carRentalService;
 	private final EmailSenderService emailSenderService;
+	private final CompanyService companyService;
 
 	
 	@Autowired
-	public CompanyManagerManager(CompanyManagerRepository companyManagerRepository,AppUserService appUserService, CarRentalService carRentalService,EmailSenderService emailSenderService) {
+	public CompanyManagerManager(CompanyManagerRepository companyManagerRepository,AppUserService appUserService, CarRentalService carRentalService,EmailSenderService emailSenderService,CompanyService companyService) {
 		super();
 		this.companyManagerRepository = companyManagerRepository;
 		this.appUserService = appUserService;
 		this.carRentalService = carRentalService;
 		this.emailSenderService = emailSenderService;
+		this.companyService = companyService;
 	}
-
+	
+	
 	@Override
-	public Result addCompanyManager(CompanyManagerRegisterDto companyManagerRegisterDto, int companyId) {
+	public Result register(CompanyManagerRegisterDto companyManagerRegisterDto) {
+		DataResult<Company> company = this.companyService.getById(companyManagerRegisterDto.getCompanyId());
+		if(!company.getSuccess()) {
+			return new ErrorResult(Messages.companyNotExist);
+		}
+		 if(company.getData().getManager()!=null) {
+			return new ErrorResult(Messages.companyHasManager);
+		}
+
+		 if(!company.getData().getManagerEmail().equals(companyManagerRegisterDto.getEmail())) {
+			return new ErrorResult(Messages.companyManagerEmailError);
+		}
+	
 		AppUser user = new AppUser();
 		user.setEmail(companyManagerRegisterDto.getEmail());
 		user.setPassword(companyManagerRegisterDto.getPassword());
 		user.setRole(new Role(3,"ROLE_COMPANY_MANAGER"));
 		AppUser insertedUser = this.appUserService.saveUser(user);
-		
+			
 		CompanyManager companyManager = new CompanyManager();
-		companyManager.setCompany(new Company(companyId));
+		companyManager.setCompany(company.getData());
 		companyManager.setAppUser(insertedUser);
 		this.companyManagerRepository.save(companyManager);
-		
+			
 		log.info("A company manager has added to the service with this information:\nEmail : "+companyManagerRegisterDto.getEmail());
-		
+			
 		return new SuccessResult(Messages.companyManagerAdded);
+		
+		
 	}
-
+	
 
 	@Override
 	public DataResult<Integer> getCompanyIdByManagerEmail(String email) {
@@ -111,6 +131,15 @@ public class CompanyManagerManager implements CompanyManagerService{
 	public Result confirmRentalRequest(int requestId) {
 		String managerEmail =  SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
 		int companyId = this.getCompanyIdByManagerEmail(managerEmail).getData();
+		
+		Company company = this.companyService.getById(companyId).getData();
+		company.setPoint(company.getPoint() +CompanyPoints.CompanyPointIncreaseValue);
+		Result companyPointResult =this.companyService.save(company);
+		
+		if(companyPointResult.getSuccess()) {
+			log.info(company.getCompanyName()+ "'s rating increased by "+CompanyPoints.CompanyPointIncreaseValue);
+		}
+		
 		DataResult<String> customerEmail = this.carRentalService.getCustomerEmailByRequestId(requestId);
 		this.emailSenderService.sendEmail(customerEmail.getData(), Messages.carRentalRequestApprovedCustomerMessage, Messages.carRentalRequestApprovedCustomerSubject);
 		Result result = this.carRentalService.confirmRentalRequestById(requestId,companyId);
@@ -126,6 +155,8 @@ public class CompanyManagerManager implements CompanyManagerService{
 		log.info("Car returned by "+managerEmail);
 		return result;
 	}
+
+	
 	
 
 

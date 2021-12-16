@@ -33,5 +33,9 @@ public class GearType {
 	
 	@OneToMany(mappedBy = "gearType")
 	private List<Vehicle> vehicles;
+	
+	public GearType(int id) {
+		this.id = id;
+	}
 }
 

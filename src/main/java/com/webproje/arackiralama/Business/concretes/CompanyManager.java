@@ -5,13 +5,19 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.webproje.arackiralama.Business.abstracts.CompanyManagerService;
 import com.webproje.arackiralama.Business.abstracts.CompanyService;
 import com.webproje.arackiralama.Business.constants.Messages;
+import com.webproje.arackiralama.Core.utilities.emailSender.EmailSenderService;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.DataResult;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
+import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorDataResult;
+import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorResult;
 import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessDataResult;
 import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessResult;
 import com.webproje.arackiralama.Entity.concretes.City;
@@ -25,13 +31,12 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class CompanyManager implements CompanyService{
 	private final CompanyRepository companyRepository;
-	private final CompanyManagerService companyManagerService;
+	private final EmailSenderService emailSenderService;
 
 	@Autowired
-	public CompanyManager(CompanyRepository companyRepository, CompanyManagerService companyManagerService) {
-		super();
+	public CompanyManager(CompanyRepository companyRepository,EmailSenderService emailSenderService) {
 		this.companyRepository = companyRepository;
-		this.companyManagerService = companyManagerService;
+		this.emailSenderService = emailSenderService;
 	}
 
 	@Override
@@ -44,12 +49,12 @@ public class CompanyManager implements CompanyService{
 		company.setPoint(0);
 		company.setSiteUrl(companyAddDto.getSiteUrl());
 		company.setVehicleNumber(0);
+		company.setManagerEmail(companyAddDto.getManagerEmail());
+		this.companyRepository.save(company);
 	
-		Company insertedCompany = this.companyRepository.save(company);
-		Result result = this.companyManagerService.addCompanyManager(companyAddDto.getCompanyManagerRegisterDto(), insertedCompany.getId());
-		
 		log.info("A company added to the service with "+ company.getCompanyName()+ " name.");
-		return new SuccessResult(Messages.companyAdded + "\n " + result.getMessage());
+		this.emailSenderService.sendEmail(companyAddDto.getManagerEmail(),Messages.companyAddedServiceEmailBody, Messages.companyAddedServiceEmailSubject);
+		return new SuccessResult(Messages.companyAdded);
 	}
 
 	@Override
@@ -60,15 +65,34 @@ public class CompanyManager implements CompanyService{
 	}
 
 	@Override
-	public DataResult<List<CompanyListDto>> listCompany(Optional<Integer> companyId) {
+	public DataResult<List<CompanyListDto>> listCompany(Optional<Integer> companyId,Optional<Integer> pageSize, Optional<Integer> pageNum) {
+		int _pageSize = pageSize.isPresent() && pageSize.get()<20 && pageSize.get()>10 ?pageSize.get() : 10;
+		int _pageNum = pageNum.isPresent() && pageNum.get()>0 ? pageNum.get(): 1;
+		Pageable pageable = PageRequest.of(_pageNum-1, _pageSize);
+		
 		List<CompanyListDto> companies = new ArrayList<CompanyListDto>();
 		if(companyId.isPresent()) {
 			companies.add(this.companyRepository.listSingCompany(companyId.get()));
 		}
 		else {
-			companies = this.companyRepository.listAllCompanies();
+			companies = this.companyRepository.listAllCompanies(pageable);
 		}
 		return new SuccessDataResult<List<CompanyListDto>>(companies);
+	}
+
+	@Override
+	public DataResult<Company> getById(int companyId) {
+		Company company = this.companyRepository.findById(companyId).orElse(null);
+		if(company !=null) {
+			return new SuccessDataResult<Company>(company);
+		}
+		return new ErrorDataResult<Company>();
+	}
+
+	@Override
+	public Result save(Company company) {
+		this.companyRepository.save(company);
+		return new SuccessResult();
 	}
 
 

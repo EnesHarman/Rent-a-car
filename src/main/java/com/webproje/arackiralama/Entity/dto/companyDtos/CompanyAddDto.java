@@ -1,7 +1,5 @@
 package com.webproje.arackiralama.Entity.dto.companyDtos;
 
-import com.webproje.arackiralama.Entity.dto.companyManagerDtos.CompanyManagerRegisterDto;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,5 +19,5 @@ public class CompanyAddDto {
 	
 	private int cityId;
 	
-	private CompanyManagerRegisterDto companyManagerRegisterDto;
+	private String managerEmail;
 }

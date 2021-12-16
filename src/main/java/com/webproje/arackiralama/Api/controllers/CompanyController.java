@@ -48,8 +48,8 @@ public class CompanyController {
 	}
 	
 	@GetMapping("/list")
-	public ResponseEntity<?> listCompany(@RequestParam Optional<Integer> companyId){
-		DataResult<List<CompanyListDto>> result = this.companyService.listCompany(companyId);
+	public ResponseEntity<?> listCompany(@RequestParam Optional<Integer> companyId,@RequestParam Optional<Integer> pageSize, @RequestParam Optional<Integer> pageNum){
+		DataResult<List<CompanyListDto>> result = this.companyService.listCompany(companyId,pageSize,pageNum);
 		if(result.getSuccess()) {
 			 return ResponseEntity.ok(result.getData());
 		 }
