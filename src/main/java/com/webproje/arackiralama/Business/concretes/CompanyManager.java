@@ -24,6 +24,7 @@ import com.webproje.arackiralama.Entity.concretes.City;
 import com.webproje.arackiralama.Entity.concretes.Company;
 import com.webproje.arackiralama.Entity.dto.companyDtos.CompanyAddDto;
 import com.webproje.arackiralama.Entity.dto.companyDtos.CompanyListDto;
+import com.webproje.arackiralama.Entity.dto.companyDtos.CompanyListForManagerRegisterDto;
 import com.webproje.arackiralama.Repository.CompanyRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -50,10 +51,10 @@ public class CompanyManager implements CompanyService{
 		company.setSiteUrl(companyAddDto.getSiteUrl());
 		company.setVehicleNumber(0);
 		company.setManagerEmail(companyAddDto.getManagerEmail());
-		this.companyRepository.save(company);
+		Company insertedCompany = this.companyRepository.save(company);
 	
 		log.info("A company added to the service with "+ company.getCompanyName()+ " name.");
-		this.emailSenderService.sendEmail(companyAddDto.getManagerEmail(),Messages.companyAddedServiceEmailBody, Messages.companyAddedServiceEmailSubject);
+		this.emailSenderService.sendEmail(companyAddDto.getManagerEmail(),Messages.companyAddedServiceEmailBody + insertedCompany.getId(), Messages.companyAddedServiceEmailSubject);
 		return new SuccessResult(Messages.companyAdded);
 	}
 
@@ -94,6 +95,5 @@ public class CompanyManager implements CompanyService{
 		this.companyRepository.save(company);
 		return new SuccessResult();
 	}
-
 
 }

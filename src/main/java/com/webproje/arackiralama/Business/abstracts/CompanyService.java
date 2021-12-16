@@ -10,6 +10,7 @@ import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
 import com.webproje.arackiralama.Entity.concretes.Company;
 import com.webproje.arackiralama.Entity.dto.companyDtos.CompanyAddDto;
 import com.webproje.arackiralama.Entity.dto.companyDtos.CompanyListDto;
+import com.webproje.arackiralama.Entity.dto.companyDtos.CompanyListForManagerRegisterDto;
 
 public interface CompanyService {
 
@@ -22,5 +23,6 @@ public interface CompanyService {
 	DataResult<Company> getById(int companyId);
 
 	Result save(Company company);
+
 
 }

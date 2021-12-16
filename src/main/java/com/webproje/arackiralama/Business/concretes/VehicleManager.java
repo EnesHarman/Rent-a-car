@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.webproje.arackiralama.Business.abstracts.CarRentalService;
 import com.webproje.arackiralama.Business.abstracts.CompanyManagerService;
+import com.webproje.arackiralama.Business.abstracts.CompanyService;
 import com.webproje.arackiralama.Business.abstracts.CustomerService;
 import com.webproje.arackiralama.Business.abstracts.FuelTypeService;
 import com.webproje.arackiralama.Business.abstracts.GearTypeService;
@@ -53,11 +54,12 @@ public class VehicleManager implements VehicleService{
 	private final CompanyManagerService companyManagerService;
 	private final CarRentalService carRentalService;
 	private final CustomerService customerService;
+	private final CompanyService companyService;
 	
 	@Autowired
 	public VehicleManager(VehicleRepository vehicleRepository, GearTypeService gearTypeService,
 				FuelTypeService fuelTypeService, VehicleStatusService vehicleStatusService,CompanyManagerService companyManagerService
-				,CarRentalService carRentalService,CustomerService customerService) {
+				,CarRentalService carRentalService,CustomerService customerService,CompanyService companyService) {
 			super();
 			this.vehicleRepository = vehicleRepository;
 			this.companyManagerService = companyManagerService;
@@ -66,6 +68,7 @@ public class VehicleManager implements VehicleService{
 			this.vehicleStatusService = vehicleStatusService;
 			this.carRentalService = carRentalService;
 			this.customerService = customerService;
+			this.companyService = companyService;
 	}
 	
 	@Override
@@ -98,11 +101,12 @@ public class VehicleManager implements VehicleService{
 		vehicle.setFuelType(fuelTypeResult.getData());
 		vehicle.setVehicleStatus(vehicleStatusResult.getData());;
 		
-		Company company =new Company();
-		company.setId(this.companyManagerService.getCompanyIdByManagerEmail(managerEmail).getData());
+		Company company =this.companyService.getById(this.companyManagerService.getCompanyIdByManagerEmail(managerEmail).getData()).getData();
 		vehicle.setCompany(company);
+		company.setVehicleNumber(company.getVehicleNumber()+1);
 
 		this.vehicleRepository.save(vehicle);
+		this.companyService.save(company);
 		log.info("A company manager with "+ managerEmail + " has added a car to the system.");
 		return new SuccessResult(Messages.vehicleAdded);
 	}
