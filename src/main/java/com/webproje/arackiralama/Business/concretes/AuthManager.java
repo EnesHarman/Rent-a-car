@@ -31,7 +31,6 @@ public class AuthManager implements AuthService{
 		this.authenticationManager = authenticationManager;
 	}
 
-
 	@Override
 	public DataResult<LoginSuccessDto> login(LoginDto loginDto) {
 		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
