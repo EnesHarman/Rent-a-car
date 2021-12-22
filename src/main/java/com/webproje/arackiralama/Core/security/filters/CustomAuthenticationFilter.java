@@ -1,6 +1,7 @@
 package com.webproje.arackiralama.Core.security.filters;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.stream.Collectors;
 
 import javax.servlet.FilterChain;
@@ -49,7 +50,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
 		Algorithm algorithm = Algorithm.HMAC256(SecurityConstants.secretKey.getBytes());
 		String access_token = JWT.create()
 				.withSubject(user.getUsername())
-				.withExpiresAt(SecurityConstants.jwtExpireDate)
+				.withExpiresAt(new Date(System.currentTimeMillis() +SecurityConstants.jwtExpireDate))
 				.withIssuer(request.getRequestURI().toString())
 				.withClaim("role",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
 				.sign(algorithm);

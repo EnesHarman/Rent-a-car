@@ -1,5 +1,6 @@
 package com.webproje.arackiralama.Business.concretes;
 
+import java.util.Date;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class AuthManager implements AuthService{
 			Algorithm algorithm = Algorithm.HMAC256(SecurityConstants.secretKey.getBytes());
 			String access_token = JWT.create()
 					.withSubject(user.getUsername())
-					.withExpiresAt(SecurityConstants.jwtExpireDate)
+					.withExpiresAt(new Date(System.currentTimeMillis() +SecurityConstants.jwtExpireDate))
 					.withClaim("role",user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
 					.sign(algorithm);
 			LoginSuccessDto loginSuccessDto = new LoginSuccessDto();
