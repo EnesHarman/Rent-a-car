@@ -170,8 +170,6 @@ public class VehicleManager implements VehicleService{
 	@Override
 	public DataResult<List<VehicleDto>> listVehicles(Optional<Integer> companyId,Optional<Integer> cityId, Optional<Integer> pageSize,
 			Optional<Integer> pageNum) {
-		int cityid = cityId.isPresent()? cityId.get() : 35;
-		System.out.println(cityid);
 		int vehicleStatusRentableId = 1;
 		
 		int _pageSize = pageSize.isPresent() && pageSize.get()<20 && pageSize.get()>10 ?pageSize.get() : 10;
@@ -184,8 +182,16 @@ public class VehicleManager implements VehicleService{
 			vehicles = this.vehicleRepository.listVehiclesByCompanyId(companyId.get(), pageable,vehicleStatusRentableId);
 		}
 		else {
-			vehicles = this.vehicleRepository.listVehicles(cityid,pageable,vehicleStatusRentableId);
+			if(cityId.isPresent()) {
+				
+				vehicles = this.vehicleRepository.listVehicles(cityId.get(),pageable,vehicleStatusRentableId);
+			}
+			else {
+				vehicles = this.vehicleRepository.listVehicles(pageable,vehicleStatusRentableId);
+			}
 		}
+		
+		
 		return new SuccessDataResult<List<VehicleDto>>(Messages.vehiclesListed,vehicles);
 	}
 
@@ -213,7 +219,7 @@ public class VehicleManager implements VehicleService{
 		if(!vehicleId.isPresent()) {
 			return new ErrorDataResult<VehicleDto>(Messages.vehicleIdCannotBeNull);
 		}
-		VehicleDto vehicle = this.vehicleRepository.listSİngleVehicle(vehicleId.get());
+		VehicleDto vehicle = this.vehicleRepository.listSingleVehicle(vehicleId.get());
 		if(vehicle == null) {
 			return new ErrorDataResult<VehicleDto>(Messages.vehicleNotFound);
 		}

@@ -79,7 +79,8 @@ public class VehicleController {
 	@GetMapping("/list")
 	public ResponseEntity<?> listVehicles(
 			@RequestParam Optional<Integer> companyId,@RequestParam Optional<Integer> cityId, 
-			@RequestParam Optional<Integer> pageSize, @RequestParam Optional<Integer> pageNum){
+			@RequestParam Optional<Integer> pageSize, @RequestParam Optional<Integer> pageNum)
+	{
 		
 		DataResult<List<VehicleDto>> result = this.vehicleService.listVehicles(companyId,cityId, pageSize, pageNum);
 		if(result.getSuccess()) {

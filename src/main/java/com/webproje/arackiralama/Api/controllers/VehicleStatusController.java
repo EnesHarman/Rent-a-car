@@ -58,7 +58,7 @@ public class VehicleStatusController {
 		}
 	}
 	
-	@DeleteMapping("/delete/id")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> deleteVehicleStatus(@PathVariable int id){
 		Result result = this.vehicleStatusService.deleteVehicleStatus(id);
 		if(result.getSuccess()) {
