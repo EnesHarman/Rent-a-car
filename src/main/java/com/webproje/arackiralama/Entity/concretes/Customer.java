@@ -35,16 +35,16 @@ public class Customer {
 	@Column(name="id")
 	private int id;
 	
-	@Column(name="name", columnDefinition = "varchar(50)")
+	@Column(name="name", columnDefinition = "varchar(50)",nullable = false)
 	private String name;
 	
-	@Column(name="surname", columnDefinition = "varchar(50)")
+	@Column(name="surname", columnDefinition = "varchar(50)",nullable = false)
 	private String surname;
 	
-	@Column(name="identity_number", columnDefinition = "varchar(11)" ,unique =  true)
+	@Column(name="identity_number", columnDefinition = "varchar(11)" ,unique =  true,nullable = false)
 	private String identityNumber;
 	
-	@Column(name="phone_number", columnDefinition = "varchar(15)")
+	@Column(name="phone_number", columnDefinition = "varchar(15)",nullable = false)
 	private String phoneNumber;
 	
 	@OneToOne(cascade = CascadeType.ALL)

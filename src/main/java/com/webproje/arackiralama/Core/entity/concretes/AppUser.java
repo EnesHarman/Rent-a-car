@@ -40,13 +40,13 @@ public class AppUser {
 	@Column(name="id")
 	private int userId;
 	
-	@Column(name="email", unique = true,columnDefinition = "nvarchar(255)") 
+	@Column(name="email", unique = true,columnDefinition = "nvarchar(255)",nullable = false) 
 	@Email
 	@NotBlank
 	@NotNull
 	private String email;
 	
-	@Column(name="password")
+	@Column(name="password",nullable = false)
 	@NotBlank
 	@NotNull
 	private String password;

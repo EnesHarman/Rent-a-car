@@ -28,10 +28,10 @@ public class SystemManager {
 	@Column(name="id")
 	private int id;
 	
-	@Column(name="name", columnDefinition = "varchar(50)")
+	@Column(name="name", columnDefinition = "varchar(50)",nullable = false)
 	private String name;
 	
-	@Column(name="surname", columnDefinition = "varchar(50)")
+	@Column(name="surname", columnDefinition = "varchar(50)",nullable = false)
 	private String surname;
 	
 	@OneToOne(cascade = CascadeType.ALL)
