@@ -3,14 +3,12 @@ package com.webproje.arackiralama.Business.abstracts;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.webproje.arackiralama.Core.utilities.result.abstracts.DataResult;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
 import com.webproje.arackiralama.Entity.concretes.Company;
 import com.webproje.arackiralama.Entity.dto.companyDtos.CompanyAddDto;
 import com.webproje.arackiralama.Entity.dto.companyDtos.CompanyListDto;
-import com.webproje.arackiralama.Entity.dto.companyDtos.CompanyListForManagerRegisterDto;
+
 
 public interface CompanyService {
 

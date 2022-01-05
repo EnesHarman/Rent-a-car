@@ -8,23 +8,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import com.webproje.arackiralama.Business.abstracts.CompanyManagerService;
 import com.webproje.arackiralama.Business.abstracts.CompanyService;
 import com.webproje.arackiralama.Business.constants.Messages;
 import com.webproje.arackiralama.Core.utilities.emailSender.EmailSenderService;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.DataResult;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
 import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorDataResult;
-import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorResult;
 import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessDataResult;
 import com.webproje.arackiralama.Core.utilities.result.concretes.SuccessResult;
 import com.webproje.arackiralama.Entity.concretes.City;
 import com.webproje.arackiralama.Entity.concretes.Company;
 import com.webproje.arackiralama.Entity.dto.companyDtos.CompanyAddDto;
 import com.webproje.arackiralama.Entity.dto.companyDtos.CompanyListDto;
-import com.webproje.arackiralama.Entity.dto.companyDtos.CompanyListForManagerRegisterDto;
 import com.webproje.arackiralama.Repository.CompanyRepository;
 
 import lombok.extern.slf4j.Slf4j;

@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.webproje.arackiralama.Core.utilities.result.concretes.ErrorResult ;
-import com.webproje.arackiralama.Entity.concretes.Company;
+
 import com.webproje.arackiralama.Entity.dto.companyDtos.CompanyAddDto;
 import com.webproje.arackiralama.Entity.dto.companyDtos.CompanyListDto;
-import com.webproje.arackiralama.Entity.dto.companyDtos.CompanyListForManagerRegisterDto;
+
 import com.webproje.arackiralama.Business.abstracts.CompanyService;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.DataResult;
 import com.webproje.arackiralama.Core.utilities.result.abstracts.Result;
