@@ -29,7 +29,7 @@ public class AuthController {
 		this.authService = authService;
 	}
 	
-	@PostMapping("/login")
+	@PostMapping("/slogin")
 	public ResponseEntity<?> login(@RequestBody LoginDto loginDto ){
 		DataResult<LoginSuccessDto> result = this.authService.login(loginDto);
 		if(result.getSuccess()) {

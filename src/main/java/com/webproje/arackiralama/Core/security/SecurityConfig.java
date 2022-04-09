@@ -1,6 +1,7 @@
 package com.webproje.arackiralama.Core.security;
 
 
+import com.webproje.arackiralama.Core.security.filters.CustomAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -53,8 +54,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-//		CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(authenticationManagerBean());
-//		customAuthenticationFilter.setFilterProcessesUrl("/api/login");
+		CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(this.authenticationManagerBean());
+		customAuthenticationFilter.setFilterProcessesUrl("/api/login");
 		http.csrf().disable();
 		http.cors();
 		
@@ -117,7 +118,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
         .permitAll();
 		
 		http.authorizeRequests().anyRequest().authenticated();
-		//http.addFilter(customAuthenticationFilter);
+		http.addFilter(customAuthenticationFilter);
 		http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 	} 
 	
