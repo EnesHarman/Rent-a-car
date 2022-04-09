@@ -741,3 +741,30 @@ Caused by: java.sql.SQLException: Access denied for user '#yourusername#'@'local
 2022-04-09 20:34:25.581  INFO 7583 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
 2022-04-09 20:34:25.582  INFO 7583 --- [http-nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
 2022-04-09 20:34:25.707  INFO 7583 --- [http-nio-8080-exec-1] c.w.a.Business.concretes.AppUserManager  : User found in database {}enesharman35@gmail.com
+2022-04-09 20:36:13.747  INFO 7583 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-04-09 20:36:13.749  INFO 7583 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2022-04-09 20:36:13.753  INFO 7583 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2022-04-09 20:36:15.877  INFO 7798 --- [restartedMain] c.w.a.ArackiralamaApplication            : Starting ArackiralamaApplication using Java 17.0.2 on enes with PID 7798 (/home/rankas/Enes/Java/Rent-a-car/target/classes started by rankas in /home/rankas/Enes/Java/Rent-a-car)
+2022-04-09 20:36:15.878  INFO 7798 --- [restartedMain] c.w.a.ArackiralamaApplication            : No active profile set, falling back to default profiles: default
+2022-04-09 20:36:15.917  INFO 7798 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : Devtools property defaults active! Set 'spring.devtools.add-properties' to 'false' to disable
+2022-04-09 20:36:15.918  INFO 7798 --- [restartedMain] .e.DevToolsPropertyDefaultsPostProcessor : For additional web related logging consider setting the 'logging.level.web' property to 'DEBUG'
+2022-04-09 20:36:16.404  INFO 7798 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2022-04-09 20:36:16.449  INFO 7798 --- [restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 41 ms. Found 12 JPA repository interfaces.
+2022-04-09 20:36:16.720  INFO 7798 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2022-04-09 20:36:16.724  INFO 7798 --- [restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2022-04-09 20:36:16.724  INFO 7798 --- [restartedMain] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.54]
+2022-04-09 20:36:16.751  INFO 7798 --- [restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2022-04-09 20:36:16.751  INFO 7798 --- [restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 833 ms
+2022-04-09 20:36:16.815  INFO 7798 --- [restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2022-04-09 20:36:16.830  INFO 7798 --- [restartedMain] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.32.Final
+2022-04-09 20:36:16.868  INFO 7798 --- [restartedMain] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2022-04-09 20:36:16.898  INFO 7798 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2022-04-09 20:36:17.059  INFO 7798 --- [restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2022-04-09 20:36:17.065  INFO 7798 --- [restartedMain] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2022-04-09 20:36:17.937  INFO 7798 --- [restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2022-04-09 20:36:17.941  INFO 7798 --- [restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2022-04-09 20:36:18.114  WARN 7798 --- [restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2022-04-09 20:36:18.571  INFO 7798 --- [restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@6879f532, org.springframework.security.web.context.SecurityContextPersistenceFilter@36046359, org.springframework.security.web.header.HeaderWriterFilter@6697e0b3, org.springframework.web.filter.CorsFilter@617bd114, org.springframework.security.web.authentication.logout.LogoutFilter@3e3d4c8f, com.webproje.arackiralama.Core.security.filters.CustomAuthorizationFilter@94a80d0, com.webproje.arackiralama.Core.security.filters.CustomAuthenticationFilter@55deabce, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@22cabb6, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1113de0c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@764d48a0, org.springframework.security.web.session.SessionManagementFilter@43560d64, org.springframework.security.web.access.ExceptionTranslationFilter@d9b5101, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@33c5c8e5]
+2022-04-09 20:36:18.630  INFO 7798 --- [restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2022-04-09 20:36:18.704  INFO 7798 --- [restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2022-04-09 20:36:18.934  INFO 7798 --- [restartedMain] c.w.a.ArackiralamaApplication            : Started ArackiralamaApplication in 3.317 seconds (JVM running for 3.846)
