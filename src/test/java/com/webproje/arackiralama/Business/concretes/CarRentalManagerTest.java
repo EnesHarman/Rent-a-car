@@ -127,6 +127,7 @@ class CarRentalManagerTest {
 
         when(carRentalRepository.getById(any())).thenReturn(carRental);
         when(vehicleRepository.getById(any())).thenReturn(vehicle);
+
         //WHEN
         this.underTest.confirmRentalRequestById(companyId,requestId);
 
